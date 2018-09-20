@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'jekyll'
+gem 'minima'
 gem 'coderay'
 gem 'rake-jekyll'
 
