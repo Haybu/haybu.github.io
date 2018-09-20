@@ -116,7 +116,7 @@ to a downstream backend Flights data service.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="services-configuration"><strong>Services Configuration</strong></h2>
+<h2 id="services_configuration"><strong>Services Configuration</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -131,7 +131,7 @@ annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="CodeRay highlight"><code>@SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
 
@@ -147,7 +147,7 @@ public class ConfigServerApp {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+<pre class="CodeRay highlight"><code>spring:
   profiles: native
   cloud:
     config:
@@ -177,7 +177,7 @@ content such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+<pre class="CodeRay highlight"><code>spring:
   application:
     name: flights-service
   cloud:
@@ -189,7 +189,7 @@ content such as:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="services-registration-and-discovery"><strong>Services Registration and Discovery</strong></h2>
+<h2 id="services_registration_and_discovery"><strong>Services Registration and Discovery</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -199,7 +199,7 @@ We only need to annotate the application class with "@EnableEurekaServer"</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="CodeRay highlight"><code>@SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
 
@@ -214,7 +214,7 @@ public class RegistryServerApp {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">eureka:
+<pre class="CodeRay highlight"><code>eureka:
   client:
     register-with-eureka: false
     fetch-registry: false</code></pre>
@@ -223,7 +223,7 @@ public class RegistryServerApp {
 </div>
 </div>
 <div class="sect1">
-<h2 id="oauth2-authorization-server"><strong>OAuth2 Authorization Server</strong></h2>
+<h2 id="oauth2_authorization_server"><strong>OAuth2 Authorization Server</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -232,7 +232,7 @@ OAuth2 dependencies</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+<pre class="CodeRay highlight"><code>&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
@@ -248,7 +248,7 @@ OAuth2 dependencies</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="CodeRay highlight"><code>@Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
   ...
@@ -268,7 +268,7 @@ this server exposes a "../user" endpoint that exposes an authenticated principal
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="CodeRay highlight"><code>@Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -289,7 +289,7 @@ applications, in this illustration example, we will be exercising OAuth2
 </div>
 </div>
 <div class="sect1">
-<h2 id="front-end-ui-application"><strong>Front-End UI Application</strong></h2>
+<h2 id="front_end_ui_application"><strong>Front-End UI Application</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -301,7 +301,7 @@ the spring boot "resources" folder.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;plugin&gt;
+<pre class="CodeRay highlight"><code>&lt;plugin&gt;
   &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
   &lt;artifactId&gt;exec-maven-plugin&lt;/artifactId&gt;
   &lt;version&gt;{version}&lt;/version&gt;
@@ -335,7 +335,7 @@ checking.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="CodeRay highlight"><code>@Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -353,7 +353,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 </div>
 </div>
 <div class="sect1">
-<h2 id="resource-servers-back-end-services"><strong>Resource Servers / Back-End Services</strong></h2>
+<h2 id="resource_servers_back_end_services"><strong>Resource Servers / Back-End Services</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -368,7 +368,7 @@ information.</p>
 flights data service.</p>
 </div>
 <div class="sect2">
-<h3 id="flights-data-service"><strong>Flights data service</strong></h3>
+<h3 id="flights_data_service"><strong>Flights data service</strong></h3>
 <div class="paragraph">
 <p>Flights data service is implemented using Spring Data to retrieve flights information
 from a backend database (H2). Spring Data Rest is used to expose Flight search
@@ -377,7 +377,7 @@ airport, besides travel and return dates.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
+<pre class="CodeRay highlight"><code>@RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
 public interface FlightRepository extends PagingAndSortingRepository&lt;Flight, Long&gt; {
 
 	@RestResource(path = "datedlegs", rel = "datedlegs")
@@ -399,7 +399,7 @@ application.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="reservations-service"><strong>Reservations service</strong></h3>
+<h3 id="reservations_service"><strong>Reservations service</strong></h3>
 <div class="paragraph">
 <p>The reservation class is a Spring Boot application that exposes "/search" and
 "/book" endpoints in a RestController. As a secured OAuth2 resource server, this
@@ -413,7 +413,7 @@ in a header of the "RequestTemplate".</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Component
+<pre class="CodeRay highlight"><code>@Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_TOKEN_TYPE = "Bearer";
@@ -435,7 +435,7 @@ public class FlightClientInterceptor implements RequestInterceptor {
 </div>
 </div>
 <div class="sect1">
-<h2 id="edge-proxy"><strong>Edge Proxy</strong></h2>
+<h2 id="edge_proxy"><strong>Edge Proxy</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -451,7 +451,7 @@ Sign-On "@EnableOAuth2Sso" annotations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="CodeRay highlight"><code>@SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
 public class GatewayApp {
@@ -467,7 +467,7 @@ services are also configured.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">zuul:
+<pre class="CodeRay highlight"><code>zuul:
   ignoredServices: '*'
   routes:
     flights:
@@ -487,7 +487,7 @@ include this dependency:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+<pre class="CodeRay highlight"><code>&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-cloud-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
@@ -509,7 +509,7 @@ include this dependency:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="application-flow"><strong>Application Flow</strong></h2>
+<h2 id="application_flow"><strong>Application Flow</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">
@@ -552,7 +552,7 @@ returning 5/22/2018</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="code-repository"><strong>Code Repository</strong></h2>
+<h2 id="code_repository"><strong>Code Repository</strong></h2>
 <div class="sectionbody">
 <hr>
 <div class="paragraph">

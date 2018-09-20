@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2018-09-20T04:10:32+00:00</updated><id>/</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Gen1</title><link href="/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 Gen1" /><published>2018-08-20T00:00:00+00:00</published><updated>2018-08-20T00:00:00+00:00</updated><id>/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2018-09-20T04:25:35+00:00</updated><id>/</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Gen1</title><link href="/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 Gen1" /><published>2018-08-20T00:00:00+00:00</published><updated>2018-08-20T00:00:00+00:00</updated><id>/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both frontend application
@@ -44,7 +44,7 @@ to a downstream backend Flights data service.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;services-configuration&quot;&gt;&lt;strong&gt;Services Configuration&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;services_configuration&quot;&gt;&lt;strong&gt;Services Configuration&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -59,7 +59,7 @@ annotation.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
 
@@ -75,7 +75,7 @@ public class ConfigServerApp {
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;spring:
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;spring:
   profiles: native
   cloud:
     config:
@@ -105,7 +105,7 @@ content such as:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;spring:
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;spring:
   application:
     name: flights-service
   cloud:
@@ -117,7 +117,7 @@ content such as:&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;services-registration-and-discovery&quot;&gt;&lt;strong&gt;Services Registration and Discovery&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;services_registration_and_discovery&quot;&gt;&lt;strong&gt;Services Registration and Discovery&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -127,7 +127,7 @@ We only need to annotate the application class with &quot;@EnableEurekaServer&qu
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
 
@@ -142,7 +142,7 @@ public class RegistryServerApp {
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;eureka:
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;eureka:
   client:
     register-with-eureka: false
     fetch-registry: false&lt;/code&gt;&lt;/pre&gt;
@@ -151,7 +151,7 @@ public class RegistryServerApp {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;oauth2-authorization-server&quot;&gt;&lt;strong&gt;OAuth2 Authorization Server&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;oauth2_authorization_server&quot;&gt;&lt;strong&gt;OAuth2 Authorization Server&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -160,7 +160,7 @@ OAuth2 dependencies&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
 	&amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
 	&amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt;
 &amp;lt;/dependency&amp;gt;
@@ -176,7 +176,7 @@ OAuth2 dependencies&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
   ...
@@ -196,7 +196,7 @@ this server exposes a &quot;../user&quot; endpoint that exposes an authenticated
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -217,7 +217,7 @@ applications, in this illustration example, we will be exercising OAuth2
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;front-end-ui-application&quot;&gt;&lt;strong&gt;Front-End UI Application&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;front_end_ui_application&quot;&gt;&lt;strong&gt;Front-End UI Application&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -229,7 +229,7 @@ the spring boot &quot;resources&quot; folder.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;plugin&amp;gt;
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;plugin&amp;gt;
   &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
   &amp;lt;artifactId&amp;gt;exec-maven-plugin&amp;lt;/artifactId&amp;gt;
   &amp;lt;version&amp;gt;{version}&amp;lt;/version&amp;gt;
@@ -263,7 +263,7 @@ checking.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -281,7 +281,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;resource-servers-back-end-services&quot;&gt;&lt;strong&gt;Resource Servers / Back-End Services&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;resource_servers_back_end_services&quot;&gt;&lt;strong&gt;Resource Servers / Back-End Services&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -296,7 +296,7 @@ information.&lt;/p&gt;
 flights data service.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;flights-data-service&quot;&gt;&lt;strong&gt;Flights data service&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;flights_data_service&quot;&gt;&lt;strong&gt;Flights data service&lt;/strong&gt;&lt;/h3&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;Flights data service is implemented using Spring Data to retrieve flights information
 from a backend database (H2). Spring Data Rest is used to expose Flight search
@@ -305,7 +305,7 @@ airport, besides travel and return dates.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@RepositoryRestResource(collectionResourceRel = &quot;flights&quot;, path = &quot;flights&quot;)
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@RepositoryRestResource(collectionResourceRel = &quot;flights&quot;, path = &quot;flights&quot;)
 public interface FlightRepository extends PagingAndSortingRepository&amp;lt;Flight, Long&amp;gt; {
 
 	@RestResource(path = &quot;datedlegs&quot;, rel = &quot;datedlegs&quot;)
@@ -327,7 +327,7 @@ application.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;reservations-service&quot;&gt;&lt;strong&gt;Reservations service&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;reservations_service&quot;&gt;&lt;strong&gt;Reservations service&lt;/strong&gt;&lt;/h3&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;The reservation class is a Spring Boot application that exposes &quot;/search&quot; and
 &quot;/book&quot; endpoints in a RestController. As a secured OAuth2 resource server, this
@@ -341,7 +341,7 @@ in a header of the &quot;RequestTemplate&quot;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Component
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = &quot;Authorization&quot;;
     private static final String BEARER_TOKEN_TYPE = &quot;Bearer&quot;;
@@ -363,7 +363,7 @@ public class FlightClientInterceptor implements RequestInterceptor {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;edge-proxy&quot;&gt;&lt;strong&gt;Edge Proxy&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;edge_proxy&quot;&gt;&lt;strong&gt;Edge Proxy&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -379,7 +379,7 @@ Sign-On &quot;@EnableOAuth2Sso&quot; annotations.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
 public class GatewayApp {
@@ -395,7 +395,7 @@ services are also configured.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;zuul:
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;zuul:
   ignoredServices: '*'
   routes:
     flights:
@@ -415,7 +415,7 @@ include this dependency:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
+&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
 	&amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;
 	&amp;lt;artifactId&amp;gt;spring-cloud-starter-security&amp;lt;/artifactId&amp;gt;
 &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;
@@ -437,7 +437,7 @@ include this dependency:&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;application-flow&quot;&gt;&lt;strong&gt;Application Flow&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;application_flow&quot;&gt;&lt;strong&gt;Application Flow&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -480,7 +480,7 @@ returning 5/22/2018&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;code-repository&quot;&gt;&lt;strong&gt;Code Repository&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;code_repository&quot;&gt;&lt;strong&gt;Code Repository&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;hr&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
