@@ -12,6 +12,7 @@ to authenticate and authorize a user. Spring Cloud common services such as
 spring cloud configuration and spring cloud Eureka registry services are used.
 
 == **Architecture**
+***
 
 image::../images/spring-oauth2-gen1/RA-OAuth2-1.png[architecture,500,300]
 
