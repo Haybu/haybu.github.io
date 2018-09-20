@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2018-09-19T21:19:05-05:00</updated><id>/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Gen1</title><link href="/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 Gen1" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-09-19T21:22:02-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Gen1</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 Gen1" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both frontend application
@@ -59,7 +59,7 @@ annotation.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
 
@@ -75,7 +75,7 @@ public class ConfigServerApp {
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;spring:
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[yml]&quot;&gt;spring:
   profiles: native
   cloud:
     config:
@@ -105,7 +105,7 @@ content such as:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;spring:
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[yml]&quot;&gt;spring:
   application:
     name: flights-service
   cloud:
@@ -127,7 +127,7 @@ We only need to annotate the application class with &quot;@EnableEurekaServer&qu
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
 
@@ -142,7 +142,7 @@ public class RegistryServerApp {
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;eureka:
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[yml]&quot;&gt;eureka:
   client:
     register-with-eureka: false
     fetch-registry: false&lt;/code&gt;&lt;/pre&gt;
@@ -160,7 +160,7 @@ OAuth2 dependencies&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
 	&amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
 	&amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt;
 &amp;lt;/dependency&amp;gt;
@@ -176,7 +176,7 @@ OAuth2 dependencies&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
   ...
@@ -196,7 +196,7 @@ this server exposes a &quot;../user&quot; endpoint that exposes an authenticated
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -229,7 +229,7 @@ the spring boot &quot;resources&quot; folder.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;plugin&amp;gt;
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[xml]&quot;&gt;&amp;lt;plugin&amp;gt;
   &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
   &amp;lt;artifactId&amp;gt;exec-maven-plugin&amp;lt;/artifactId&amp;gt;
   &amp;lt;version&amp;gt;{version}&amp;lt;/version&amp;gt;
@@ -263,7 +263,7 @@ checking.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Configuration
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -305,7 +305,7 @@ airport, besides travel and return dates.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@RepositoryRestResource(collectionResourceRel = &quot;flights&quot;, path = &quot;flights&quot;)
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@RepositoryRestResource(collectionResourceRel = &quot;flights&quot;, path = &quot;flights&quot;)
 public interface FlightRepository extends PagingAndSortingRepository&amp;lt;Flight, Long&amp;gt; {
 
 	@RestResource(path = &quot;datedlegs&quot;, rel = &quot;datedlegs&quot;)
@@ -341,7 +341,7 @@ in a header of the &quot;RequestTemplate&quot;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@Component
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = &quot;Authorization&quot;;
     private static final String BEARER_TOKEN_TYPE = &quot;Bearer&quot;;
@@ -379,7 +379,7 @@ Sign-On &quot;@EnableOAuth2Sso&quot; annotations.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[java]&quot; data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[java]&quot;&gt;@SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
 public class GatewayApp {
@@ -395,7 +395,7 @@ services are also configured.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[yml]&quot; data-lang=&quot;[yml]&quot;&gt;zuul:
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[yml]&quot;&gt;zuul:
   ignoredServices: '*'
   routes:
     flights:
@@ -415,7 +415,7 @@ include this dependency:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-[xml]&quot; data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
+&lt;pre class=&quot;pygments highlight&quot;&gt;&lt;code data-lang=&quot;[xml]&quot;&gt;&amp;lt;dependency&amp;gt;
 	&amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;
 	&amp;lt;artifactId&amp;gt;spring-cloud-starter-security&amp;lt;/artifactId&amp;gt;
 &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;

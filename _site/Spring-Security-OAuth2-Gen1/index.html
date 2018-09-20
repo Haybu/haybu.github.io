@@ -131,7 +131,7 @@ annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="pygments highlight"><code data-lang="[java]">@SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
 
@@ -147,7 +147,7 @@ public class ConfigServerApp {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+<pre class="pygments highlight"><code data-lang="[yml]">spring:
   profiles: native
   cloud:
     config:
@@ -177,7 +177,7 @@ content such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+<pre class="pygments highlight"><code data-lang="[yml]">spring:
   application:
     name: flights-service
   cloud:
@@ -199,7 +199,7 @@ We only need to annotate the application class with "@EnableEurekaServer"</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="pygments highlight"><code data-lang="[java]">@SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
 
@@ -214,7 +214,7 @@ public class RegistryServerApp {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">eureka:
+<pre class="pygments highlight"><code data-lang="[yml]">eureka:
   client:
     register-with-eureka: false
     fetch-registry: false</code></pre>
@@ -232,7 +232,7 @@ OAuth2 dependencies</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+<pre class="pygments highlight"><code data-lang="[xml]">&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
@@ -248,7 +248,7 @@ OAuth2 dependencies</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="pygments highlight"><code data-lang="[java]">@Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
   ...
@@ -268,7 +268,7 @@ this server exposes a "../user" endpoint that exposes an authenticated principal
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="pygments highlight"><code data-lang="[java]">@Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -301,7 +301,7 @@ the spring boot "resources" folder.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;plugin&gt;
+<pre class="pygments highlight"><code data-lang="[xml]">&lt;plugin&gt;
   &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
   &lt;artifactId&gt;exec-maven-plugin&lt;/artifactId&gt;
   &lt;version&gt;{version}&lt;/version&gt;
@@ -335,7 +335,7 @@ checking.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+<pre class="pygments highlight"><code data-lang="[java]">@Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -377,7 +377,7 @@ airport, besides travel and return dates.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
+<pre class="pygments highlight"><code data-lang="[java]">@RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
 public interface FlightRepository extends PagingAndSortingRepository&lt;Flight, Long&gt; {
 
 	@RestResource(path = "datedlegs", rel = "datedlegs")
@@ -413,7 +413,7 @@ in a header of the "RequestTemplate".</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Component
+<pre class="pygments highlight"><code data-lang="[java]">@Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_TOKEN_TYPE = "Bearer";
@@ -451,7 +451,7 @@ Sign-On "@EnableOAuth2Sso" annotations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+<pre class="pygments highlight"><code data-lang="[java]">@SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
 public class GatewayApp {
@@ -467,7 +467,7 @@ services are also configured.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">zuul:
+<pre class="pygments highlight"><code data-lang="[yml]">zuul:
   ignoredServices: '*'
   routes:
     flights:
@@ -487,7 +487,7 @@ include this dependency:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+<pre class="pygments highlight"><code data-lang="[xml]">&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-cloud-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
