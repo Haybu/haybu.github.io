@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2018-09-20T15:08:30+00:00</updated><id>/</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00+00:00</published><updated>2018-08-20T00:00:00+00:00</updated><id>/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2018-09-20T15:16:12+00:00</updated><id>/</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00+00:00</published><updated>2018-08-20T00:00:00+00:00</updated><id>/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both frontend application
@@ -9,6 +9,7 @@ spring cloud configuration and spring cloud Eureka registry services are used.&l
 &lt;div class=&quot;sect1&quot;&gt;
 &lt;h2 id=&quot;architecture&quot;&gt;&lt;strong&gt;Architecture&lt;/strong&gt;&lt;/h2&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
+&lt;hr&gt;
 &lt;div class=&quot;imageblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
 &lt;img src=&quot;../images/spring-oauth2-gen1/RA-OAuth2-1.png&quot; alt=&quot;architecture&quot; width=&quot;500&quot; height=&quot;300&quot;&gt;
