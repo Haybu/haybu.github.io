@@ -47,7 +47,7 @@ With the appropriate dependencies, you can create a configuration server as
 a regular spring boot application by enabling the server with "@EnableConfigServer"
 annotation.
 
-```[java]
+```
 @SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
@@ -61,7 +61,7 @@ public class ConfigServerApp {
 
 One can start the configuration server with the following settings:
 
-```[yml]
+```
 spring:
   profiles: native
   cloud:
@@ -84,7 +84,7 @@ defined in each application's "bootstrap.yml" file inside the "resources" folder
 For instance, the flights data service would have a "bootstrap.yml" file with a
 content such as:
 
-```[yml]
+```
 spring:
   application:
     name: flights-service
@@ -102,7 +102,7 @@ Spring Cloud Eureka is used for services registration and discovery. It is also
 created with its appropriate dependency as a regular spring boot application.
 We only need to annotate the application class with "@EnableEurekaServer"
 
-```[java]
+```
 @SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
@@ -115,7 +115,7 @@ public class RegistryServerApp {
 
 and set it such that it would not register itself.
 
-```[yml]
+```
 eureka:
   client:
     register-with-eureka: false
@@ -128,7 +128,7 @@ eureka:
 Creating an OAuth2 authorization server is simple using Spring security and
 OAuth2 dependencies
 
-```[xml]
+```
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-security</artifactId>
@@ -142,7 +142,7 @@ OAuth2 dependencies
 As listed in the repo, a configuration class is added with
 "@EnableAuthorizationServer" annotation.
 
-```[java]
+```
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
@@ -158,7 +158,7 @@ this server exposes a "../user" endpoint that exposes an authenticated principal
 
 As configured, users authenticate using a login form mechanism
 
-```[java]
+```
 @Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
@@ -185,7 +185,7 @@ to build the Angular module into the spring boot project, a maven plugin is used
 to run "ng build" command during the "validate" stage and direct the output to
 the spring boot "resources" folder.
 
-```[xml]
+```
 <plugin>
   <groupId>org.codehaus.mojo</groupId>
   <artifactId>exec-maven-plugin</artifactId>
@@ -217,7 +217,7 @@ annotation is added to authorize access to the client application while allowing
 some of its "actuator" administration endpoints that are needed by Eureka's health
 checking.
 
-```[java]
+```
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -252,7 +252,7 @@ from a backend database (H2). Spring Data Rest is used to expose Flight search
 results. One can search a flight passing in an origin airport, destination
 airport, besides travel and return dates.
 
-```[java]
+```
 @RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long> {
 
@@ -283,7 +283,7 @@ To pass the authorization token of an authenticated client downstream when using
 a Feign client, this service includes a "RequestInterceptor" to inject the token
 in a header of the "RequestTemplate".
 
-```[java]
+```
 @Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -313,7 +313,7 @@ Sign-On "@EnableOAuth2Sso" annotations.
 
 Single Sign On feature is
 
-```[java]
+```
 @SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
@@ -327,7 +327,7 @@ with port 8080, default URL "http://localhost:8080" would route to the UI client
 application index page. Routes to other two backend reservations and flights
 services are also configured.
 
-```[yml]
+```
 zuul:
   ignoredServices: '*'
   routes:
@@ -345,7 +345,7 @@ zuul:
 Token relay feature to other proxied services is used, to enable that we need to
 include this dependency:
 
-```[xml]
+```
 <dependency>
 	<groupId>org.springframework.cloud</groupId>
 	<artifactId>spring-cloud-starter-security</artifactId>
