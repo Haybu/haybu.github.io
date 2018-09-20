@@ -5,6 +5,9 @@ require 'rake-jekyll'
 # See http://github.com/jirutka/rake-jekyll for more options.
 Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
     t.committer = 'Haytham Mohamed <haybu@hotmail.com>'
-    t.build_script = 'bundle exec jekyll build --destination ./_site'
+    t.build_script = ->(dest_dir) {
+        puts "\nRunning Jekyll..."
+        sh "bundle exec jekyll build --destination ./_site"
+      }
     #t.deploy_branch = 'master'
 end
