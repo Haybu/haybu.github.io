@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Spring Security OAuth2 Gen1 – Haytham Mohamed – Advisory Solutions Architect @Pivotal</title>
+    <title>Spring Security OAuth2 First Generation – Haytham Mohamed – Advisory Solutions Architect @Pivotal</title>
 
         <meta charset="utf-8" />
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
@@ -9,28 +9,14 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="
-This article describes how to secure an application using Spring security OAuth2
-generation-one. The sample consists of an Angular front-end application
-and a couple of Spring boot based backend services. Both frontend application
-and backend services are behind an edge proxy that assumes the responsibility
-to authenticate and authorize a user. Spring Cloud common services such as
-spring cloud configuration and spring cloud Eureka registry services are used.
-" />
-    <meta property="og:description" content="
-This article describes how to secure an application using Spring security OAuth2
-generation-one. The sample consists of an Angular front-end application
-and a couple of Spring boot based backend services. Both frontend application
-and backend services are behind an edge proxy that assumes the responsibility
-to authenticate and authorize a user. Spring Cloud common services such as
-spring cloud configuration and spring cloud Eureka registry services are used.
-" />
+    <meta name="description" content="This article describes how to secure an application using Spring security OAuth2 generation-one." />
+    <meta property="og:description" content="This article describes how to secure an application using Spring security OAuth2 generation-one." />
     
     <meta name="author" content="Haytham Mohamed" />
 
     
-    <meta property="og:title" content="Spring Security OAuth2 Gen1" />
-    <meta property="twitter:title" content="Spring Security OAuth2 Gen1" />
+    <meta property="og:title" content="Spring Security OAuth2 First Generation" />
+    <meta property="twitter:title" content="Spring Security OAuth2 First Generation" />
     
 
     <!--[if lt IE 9]>
@@ -42,6 +28,12 @@ spring cloud configuration and spring cloud Eureka registry services are used.
     <link rel="alternate" type="application/rss+xml" title="Haytham Mohamed - Advisory Solutions Architect @Pivotal" href="/feed.xml" />
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
 
+    <link rel="stylesheet" href="../../../css/foundation.css">    
+    <link rel="stylesheet" href="../../../css/coderay.css">
+    <link rel="stylesheet" href="../../../css/asciidoctor.css">
+    <script src="../../../js/vendor/modernizr.js"></script>
+    <script src="../../../js/toc.js"></script>
+
   </head>
 
   <body>
@@ -50,7 +42,7 @@ spring cloud configuration and spring cloud Eureka registry services are used.
     <div class="intro-header">    
       <div class="container">
         <div class="post-heading">
-            <h1>Spring Security OAuth2 Gen1</h1>
+            <h1>Spring Security OAuth2 First Generation</h1>
             <!--
             <span class="meta">Posted by <a href="/about"> Haytham Mohamed
             </a> on August 20, 2018
@@ -64,7 +56,7 @@ spring cloud configuration and spring cloud Eureka registry services are used.
     </div>
     
 
-    <div id="main" role="main" class="container">
+    <div id="main" role="main" class="postcontainer">
       <article class="post">
  <div class="space-extra-small">
  </div>
@@ -595,6 +587,16 @@ repository, branch name is "separate-proxy-oauth2".</p>
 
 
     
+
+
+
+    <script src="../../../js/vendor/jquery.js"></script>
+    <script src="../../../js/foundation.min.js"></script>
+    <script>
+    $(document).foundation();
+    var doc = document.documentElement;
+    doc.setAttribute('data-useragent', navigator.userAgent);
+    </script>
 
   </body>
 </html>

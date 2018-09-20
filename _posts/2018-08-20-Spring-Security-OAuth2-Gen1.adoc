@@ -4,6 +4,11 @@ title: Spring Security OAuth2 First Generation
 author: Haytham Mohamed
 ---
 
+:showtitle:
+:page-navtitle: First Entry
+:page-excerpt: This article describes how to secure an application using Spring security OAuth2 generation-one.
+:page-root: ../../../
+
 This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both frontend application
