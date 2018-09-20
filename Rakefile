@@ -13,7 +13,7 @@ Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
     #}
     t.build_script = ->(dest_dir) {
       puts "\nRunning Jekyll..."
-      sh "bundle exec jekyll build --verbose --destination $PWD/_site && git add --all && git commit --author='Haytham Mohamed <haybu@hotmail.com>' -m 'update'"
+      sh "bundle exec jekyll build --verbose --destination $PWD/_site && git add --all && git commit --author='Haytham Mohamed <haybu@hotmail.com>' -m 'update' && git push origin gh-pages"
     }
     #t.deploy_branch = 'gh-pages'
     
