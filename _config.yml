@@ -8,6 +8,8 @@ name: Haytham Mohamed
 # Short bio or description (displayed in the header)
 description: Advisory Solutions Architect @Pivotal
 
+destination: _site
+
 # Theme
 theme: minima
 
