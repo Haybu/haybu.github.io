@@ -5,4 +5,5 @@ require 'rake-jekyll'
 # See http://github.com/jirutka/rake-jekyll for more options.
 Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
     t.committer = 'Haytham Mohamed <haybu@hotmail.com>'
+    t.deploy_branch = 'master'
 end
