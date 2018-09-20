@@ -10,10 +10,6 @@ description: Advisory Solutions Architect @Pivotal
 
 destination: ./_site
 
-# Theme
-theme: minima
-
-
 #
 # Flags below are optional
 #
