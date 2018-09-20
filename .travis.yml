@@ -9,7 +9,6 @@ env:
 deploy:
   provider: pages
   skip-cleanup: true
-  github-token: 8fa74a5a9f59b84818d150d1854e40640cc43d16
   keep-history: true
   on:
     branch: master
