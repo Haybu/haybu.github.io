@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'jekyll'
 gem 'minima'
 gem 'coderay'
+gem 'rake'
 gem 'rake-jekyll'
 
 group :jekyll_plugins do
