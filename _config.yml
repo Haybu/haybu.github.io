@@ -77,6 +77,7 @@ plugins:
   - jekyll-asciidoc 
   - coderay
   - rake-jekyll 
+  - rake
 
 # Exclude these files from your production _site
 exclude:
