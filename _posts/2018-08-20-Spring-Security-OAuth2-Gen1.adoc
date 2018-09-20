@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Security OAuth2 Gen1
+title: Spring Security OAuth2 First Generation
 author: Haytham Mohamed
 ---
 
