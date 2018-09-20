@@ -11,10 +11,10 @@ Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
     #t.author = -> {
       #`git log -n 1 --format='%aN <%aE>'`.strip
     #}
-    #t.build_script = ->(dest_dir) {
-      #puts "\nRunning Jekyll..."
-      #sh "bundle exec jekyll build --verbose --destination $PWD/_site"
-    #}
+    t.build_script = ->(dest_dir) {
+      puts "\nRunning Jekyll..."
+      sh "bundle exec jekyll build --verbose --destination $PWD/_site && git add --all && git commit -m 'update'"
+    }
     #t.deploy_branch = 'gh-pages'
     
 end
