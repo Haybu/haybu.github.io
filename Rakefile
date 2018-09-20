@@ -10,4 +10,5 @@ Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
         sh "bundle exec jekyll build --verbose --destination $PWD/_site"
       }
     t.deploy_branch = 'gh-pages'
+    t.skip_deploy = false
 end
