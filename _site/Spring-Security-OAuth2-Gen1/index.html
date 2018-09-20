@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spring Security OAuth2 Gen1 – Haytham Mohamed – Advisory Solutions Architect @Pivotal</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="
+This article describes how to secure an application using Spring security OAuth2
+generation-one. The sample consists of an Angular front-end application
+and a couple of Spring boot based backend services. Both frontend application
+and backend services are behind an edge proxy that assumes the responsibility
+to authenticate and authorize a user. Spring Cloud common services such as
+spring cloud configuration and spring cloud Eureka registry services are used.
+" />
+    <meta property="og:description" content="
+This article describes how to secure an application using Spring security OAuth2
+generation-one. The sample consists of an Angular front-end application
+and a couple of Spring boot based backend services. Both frontend application
+and backend services are behind an edge proxy that assumes the responsibility
+to authenticate and authorize a user. Spring Cloud common services such as
+spring cloud configuration and spring cloud Eureka registry services are used.
+" />
+    
+    <meta name="author" content="Haytham Mohamed" />
+
+    
+    <meta property="og:title" content="Spring Security OAuth2 Gen1" />
+    <meta property="twitter:title" content="Spring Security OAuth2 Gen1" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="Haytham Mohamed - Advisory Solutions Architect @Pivotal" href="/feed.xml" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+  </head>
+
+  <body>
+    
+    
+    <div class="intro-header">    
+      <div class="container">
+        <div class="post-heading">
+            <h1>Spring Security OAuth2 Gen1</h1>
+            <!--
+            <span class="meta">Posted by <a href="/about"> Haytham Mohamed
+            </a> on August 20, 2018
+            -->
+            <span class="meta"> August 20, 2018
+            <a href="/"> { Return to Blog }</a>
+            </span>
+        </div>
+            
+      </div>
+    </div>
+    
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+ <div class="space-extra-small">
+ </div>
+
+  <div class="entry">
+    <div class="paragraph">
+<p>This article describes how to secure an application using Spring security OAuth2
+generation-one. The sample consists of an Angular front-end application
+and a couple of Spring boot based backend services. Both frontend application
+and backend services are behind an edge proxy that assumes the responsibility
+to authenticate and authorize a user. Spring Cloud common services such as
+spring cloud configuration and spring cloud Eureka registry services are used.</p>
+</div>
+<div class="sect1">
+<h2 id="architecture"><strong>Architecture</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/RA-OAuth2-1.png" alt="architecture" width="500" height="300">
+</div>
+</div>
+<div class="paragraph">
+<p>All components are behind an edge proxy service. Spring Cloud Zuul is used as
+the edge service. A user launch the application using a route to the landing
+index page of the front-end UI application. The front-end UI is implemented as
+an Angular-based separate project that compiled and packaged into a spring-boot
+application. The front-end UI application reaches out to a backend reservations
+service through the edge proxy. The reservations services in turn seeks flights
+information by routing via the edge proxy to another backend flights data service.</p>
+</div>
+<div class="paragraph">
+<p>This architecture enables us to have the following:</p>
+</div>
+<div class="paragraph">
+<p>1- Communications between all modules to go through an edge-service to centrally
+manage security, logging and other common concerns</p>
+</div>
+<div class="paragraph">
+<p>2- Use of authentication token relay between edge proxy service and front-end UI application</p>
+</div>
+<div class="paragraph">
+<p>3- Use of Spring Feign to communicate between the two backend services</p>
+</div>
+<div class="paragraph">
+<p>4- Use of a Feign intercepter to inject authentication token when communicating
+to a downstream backend Flights data service.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="services-configuration"><strong>Services Configuration</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>Spring Cloud Config Server is used externalize all modules configurations.
+For easy launching, the configuration server launches with a native profile to
+leverage a local backend storage to keep the "yml" properties files.</p>
+</div>
+<div class="paragraph">
+<p>With the appropriate dependencies, you can create a configuration server as
+a regular spring boot application by enabling the server with "@EnableConfigServer"
+annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+@EnableConfigServer
+public class ConfigServerApp {
+
+	public static void main(String[] args) {
+
+		SpringApplication.run(ConfigServerApp.class, args);
+	}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One can start the configuration server with the following settings:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:///[path-to-yml-files]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As in this sample, you can keep all the "yml" configuration files in some local
+storage path:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/config-files.png" alt="config-files" width="250" height="200">
+</div>
+</div>
+<div class="paragraph">
+<p>Each configuration file is named after the name of the corresponding configured
+application and as defined by "spring.application.name" property in that application.</p>
+</div>
+<div class="paragraph">
+<p>This application name and the configuration service&#8217;s URL are
+defined in each application&#8217;s "bootstrap.yml" file inside the "resources" folder.
+For instance, the flights data service would have a "bootstrap.yml" file with a
+content such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">spring:
+  application:
+    name: flights-service
+  cloud:
+    config:
+      fail-fast: true
+      uri: http://localhost:8888</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="services-registration-and-discovery"><strong>Services Registration and Discovery</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>Spring Cloud Eureka is used for services registration and discovery. It is also
+created with its appropriate dependency as a regular spring boot application.
+We only need to annotate the application class with "@EnableEurekaServer"</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+@EnableEurekaServer
+public class RegistryServerApp {
+
+	public static void main(String[] args) {
+		SpringApplication.run(RegistryServerApp.class, args);
+	}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and set it such that it would not register itself.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="oauth2-authorization-server"><strong>OAuth2 Authorization Server</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>Creating an OAuth2 authorization server is simple using Spring security and
+OAuth2 dependencies</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.security.oauth&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-security-oauth2&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As listed in the repo, a configuration class is added with
+"@EnableAuthorizationServer" annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+@EnableAuthorizationServer
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A client in this class is defined with Id as "acme", secret as "acmesecret",
+different grant types and scopes as "openid". You can optionally set the scopes auto-approval.</p>
+</div>
+<div class="paragraph">
+<p>To enable resource servers (backend services) to decode the authorization tokens,
+this server exposes a "../user" endpoint that exposes an authenticated principal.</p>
+</div>
+<div class="paragraph">
+<p>As configured, users authenticate using a login form mechanism</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+public class WebSecurity extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().permitAll();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although its also appropriate to apply an "Implicit" OAuth2 flow in single page
+applications, in this illustration example, we will be exercising OAuth2
+"authorization_code" flow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="front-end-ui-application"><strong>Front-End UI Application</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>UI application is implemented using Angular (6). A simple spring boot
+project is also created to serve the client UI application. In order
+to build the Angular module into the spring boot project, a maven plugin is used
+to run "ng build" command during the "validate" stage and direct the output to
+the spring boot "resources" folder.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;plugin&gt;
+  &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+  &lt;artifactId&gt;exec-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;{version}&lt;/version&gt;
+	&lt;executions&gt;
+		&lt;execution&gt;
+			&lt;phase&gt;validate&lt;/phase&gt;
+			&lt;goals&gt;
+				&lt;goal&gt;exec&lt;/goal&gt;
+			&lt;/goals&gt;
+		&lt;/execution&gt;
+	&lt;/executions&gt;
+	&lt;configuration&gt;
+		&lt;executable&gt;ng&lt;/executable&gt;
+		&lt;workingDirectory&gt;../agency-ui&lt;/workingDirectory&gt;
+		&lt;arguments&gt;
+			&lt;argument&gt;build&lt;/argument&gt;
+			&lt;argument&gt;--output-path&lt;/argument&gt;
+			&lt;argument&gt;../agency-frontend/src/main/resources/static&lt;/argument&gt;
+		&lt;/arguments&gt;
+	&lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This UI client application represents one of the secured resources behind the
+edge proxy, it also registered in Eureka to be discovered and routed by the proxy.
+Therefore, a configuration class marked with "@EnableResourceServer"
+annotation is added to authorize access to the client application while allowing
+some of its "actuator" administration endpoints that are needed by Eureka&#8217;s health
+checking.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Configuration
+@EnableResourceServer
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .requestMatcher(new RequestHeaderRequestMatcher("Authorization"))
+                .authorizeRequests()
+                .antMatchers("/admin/info", "/admin/health/**").permitAll()  // allow actuator endpoints
+                .anyRequest().authenticated();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="resource-servers-back-end-services"><strong>Resource Servers / Back-End Services</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>There are two resource servers as backend services. A reservation service that
+helps to search flights, perform booking and issue confirmations. In order to
+perform its function, this service utilizes a downstream flights service that
+only acts as data-as-a-service to retrieve information from a database of flights
+information.</p>
+</div>
+<div class="paragraph">
+<p>The reservation service uses Spring Cloud Feign as a client to interact with the
+flights data service.</p>
+</div>
+<div class="sect2">
+<h3 id="flights-data-service"><strong>Flights data service</strong></h3>
+<div class="paragraph">
+<p>Flights data service is implemented using Spring Data to retrieve flights information
+from a backend database (H2). Spring Data Rest is used to expose Flight search
+results. One can search a flight passing in an origin airport, destination
+airport, besides travel and return dates.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
+public interface FlightRepository extends PagingAndSortingRepository&lt;Flight, Long&gt; {
+
+	@RestResource(path = "datedlegs", rel = "datedlegs")
+	@Query("SELECT f FROM Flight f WHERE f.origin = ?1 AND f.destination = ?2 "
+			+ " AND f.departure between ?3 and ?4")
+	public List&lt;Flight&gt; findFlightsByCustomQueryDated(@Param("origin") String origin,
+			@Param("destination") String destination,
+			@Param("mindate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date mindate,
+			@Param("maxdate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date maxdate);
+
+...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This service is also an OAuth2 secured resource server that includes same OAuth2
+dependencies and "ResourceServerConfig" configuration class as in the Client
+application.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reservations-service"><strong>Reservations service</strong></h3>
+<div class="paragraph">
+<p>The reservation class is a Spring Boot application that exposes "/search" and
+"/book" endpoints in a RestController. As a secured OAuth2 resource server, this
+service includes same OAuth2 dependencies and "ResourceServerConfig" configuration
+class as in the Client application.</p>
+</div>
+<div class="paragraph">
+<p>To pass the authorization token of an authenticated client downstream when using
+a Feign client, this service includes a "RequestInterceptor" to inject the token
+in a header of the "RequestTemplate".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@Component
+public class FlightClientInterceptor implements RequestInterceptor {
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_TOKEN_TYPE = "Bearer";
+
+    @Override
+    public void apply(RequestTemplate template) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication != null &amp;&amp; authentication.getDetails() instanceof OAuth2AuthenticationDetails) {
+            OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+            template.header(AUTHORIZATION_HEADER, String.format("%s %s", BEARER_TOKEN_TYPE, details.getTokenValue()));
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="edge-proxy"><strong>Edge Proxy</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>Spring Cloud Zuul is used to implement the edge proxy. All access to backend
+services including the client application itself would go through this proxy.</p>
+</div>
+<div class="paragraph">
+<p>The application&#8217;s main class is marked with "@EnableZuulProxy" and OAuth2 Single
+Sign-On "@EnableOAuth2Sso" annotations.</p>
+</div>
+<div class="paragraph">
+<p>Single Sign On feature is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[java]" data-lang="[java]">@SpringBootApplication
+@EnableZuulProxy
+@EnableOAuth2Sso
+public class GatewayApp {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Routes are defined for this application as shown below. The server is exposed
+with port 8080, default URL "http://localhost:8080" would route to the UI client
+application index page. Routes to other two backend reservations and flights
+services are also configured.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[yml]" data-lang="[yml]">zuul:
+  ignoredServices: '*'
+  routes:
+    flights:
+      path: /flights/**
+      serviceId: FLIGHTS-SERVICE
+    reservations:
+      path: /reservations/**
+      serviceId: RESERVATIONS-SERVICE
+    ui:
+      path: /**
+      url: AGENCY-FRONTEND</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Token relay feature to other proxied services is used, to enable that we need to
+include this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-[xml]" data-lang="[xml]">&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-cloud-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing">Testing</h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>In this secction..</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="application-flow"><strong>Application Flow</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>After launching all the applications in this example</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/apps-launched.png" alt="launch" width="300" height="150">
+</div>
+</div>
+<div class="paragraph">
+<p>When accessing <a href="http://localhost:8080" class="bare">http://localhost:8080</a>, you will be directed to a login screen
+to authenticate. Use username as "user", password as "password"</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/login-screen.png" alt="login" width="300" height="150">
+</div>
+</div>
+<div class="paragraph">
+<p>You will then be asked to authorize the scope, click on "Approve"</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/authorize.png" alt="authorize" width="350" height="200">
+</div>
+</div>
+<div class="paragraph">
+<p>After approving the scope you will be landed at the application&#8217;s homepage</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/spring-oauth2-gen1/home-page.png" alt="homepage" width="450" height="300">
+</div>
+</div>
+<div class="paragraph">
+<p>You can search flights from "AUS" to "IAH" airports, traveling 5/5/2018 and
+returning 5/22/2018</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="code-repository"><strong>Code Repository</strong></h2>
+<div class="sectionbody">
+<hr>
+<div class="paragraph">
+<p>Please reference this example&#8217;s code in its
+<a href="https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2">Github</a>
+repository, branch name is "separate-proxy-oauth2".</p>
+</div>
+</div>
+</div>
+  </div>
+
+  
+</article>
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+            <div class="svg-icon">
+          
+<a href="mailto:hmohamed@pivotal.io"><i class="icon-envelope icon-2x"></i></a>
+
+
+<a href="https://github.com/haybu"><i class="icon-github icon-2x"></i></a>
+
+<a href="https://www.linkedin.com/in/haytham-mohamed-6636408"><i class="icon-linkedin-sign icon-2x"></i></a>
+
+
+<a href="https://www.twitter.com/haymahmoh"><i class="icon-twitter icon-2x"></i></a>
+
+
+
+
+            </div>
+        </footer>
+      </div>
+    </div>
+
+
+    
+
+  </body>
+</html>
