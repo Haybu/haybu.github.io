@@ -7,7 +7,7 @@ Rake::Jekyll::GitDeployTask.new(:deploy) do |t|
     t.committer = 'Haytham Mohamed <haybu@hotmail.com>'
     t.build_script = ->(dest_dir) {
         puts "\nRunning Jekyll..."
-        sh "bundle exec jekyll build --watch --destination $PWD/_site"
+        sh "bundle exec jekyll build --verbose --destination $PWD/_site"
       }
     #t.deploy_branch = 'master'
 end
