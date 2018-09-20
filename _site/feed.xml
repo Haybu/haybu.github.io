@@ -1,21 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-09-20T11:35:49-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-09-20T12:33:33-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both frontend application
 and backend services are behind an edge proxy that assumes the responsibility
 to authenticate and authorize a user. Spring Cloud common services such as
 spring cloud configuration and spring cloud Eureka registry services are used.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;architecture&quot;&gt;&lt;strong&gt;Architecture&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/RA-OAuth2-1.png&quot; alt=&quot;architecture&quot; width=&quot;500&quot; height=&quot;300&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/RA-OAuth2-1.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;All components are behind an edge proxy service. Spring Cloud Zuul is used as
 the edge service. A user launch the application using a route to the landing
 index page of the front-end UI application. The front-end UI is implemented as
@@ -23,470 +17,350 @@ an Angular-based separate project that compiled and packaged into a spring-boot
 application. The front-end UI application reaches out to a backend reservations
 service through the edge proxy. The reservations services in turn seeks flights
 information by routing via the edge proxy to another backend flights data service.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;This architecture enables us to have the following:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;1- Communications between all modules to go through an edge-service to centrally
 manage security, logging and other common concerns&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;2- Use of authentication token relay between edge proxy service and front-end UI application&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;3- Use of Spring Feign to communicate between the two backend services&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;4- Use of a Feign intercepter to inject authentication token when communicating
 to a downstream backend Flights data service.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;services_configuration&quot;&gt;&lt;strong&gt;Services Configuration&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;h2 id=&quot;services-configuration&quot;&gt;Services Configuration&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;Spring Cloud Config Server is used externalize all modules configurations.
 For easy launching, the configuration server launches with a native profile to
-leverage a local backend storage to keep the &quot;yml&quot; properties files.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+leverage a local backend storage to keep the “yml” properties files.&lt;/p&gt;
+
 &lt;p&gt;With the appropriate dependencies, you can create a configuration server as
-a regular spring boot application by enabling the server with &quot;@EnableConfigServer&quot;
+a regular spring boot application by enabling the server with “@EnableConfigServer”
 annotation.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
-@EnableConfigServer
-public class ConfigServerApp {
 
-	public static void main(String[] args) {
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableConfigServer&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConfigServerApp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-		SpringApplication.run(ConfigServerApp.class, args);
-	}
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ConfigServerApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;One can start the configuration server with the following settings:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;spring:
-  profiles: native
-  cloud:
-    config:
-      server:
-        native:
-          searchLocations: file:///[path-to-yml-files]&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;As in this sample, you can keep all the &quot;yml&quot; configuration files in some local
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;profiles&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;native&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;native&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;searchLocations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;file:///[path-to-yml-files]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As in this sample, you can keep all the “yml” configuration files in some local
 storage path:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/config-files.png&quot; alt=&quot;config-files&quot; width=&quot;250&quot; height=&quot;200&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/config-files.png&quot; width=&quot;20%&quot; height=&quot;20%&quot; title=&quot;config files&quot; border=&quot;2&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;Each configuration file is named after the name of the corresponding configured
-application and as defined by &quot;spring.application.name&quot; property in that application.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This application name and the configuration service&amp;#8217;s URL are
-defined in each application&amp;#8217;s &quot;bootstrap.yml&quot; file inside the &quot;resources&quot; folder.
-For instance, the flights data service would have a &quot;bootstrap.yml&quot; file with a
+application and as defined by “spring.application.name” property in that application.&lt;/p&gt;
+
+&lt;p&gt;This application name and the configuration service’s URL are
+defined in each application’s “bootstrap.yml” file inside the “resources” folder.
+For instance, the flights data service would have a “bootstrap.yml” file with a
 content such as:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;spring:
-  application:
-    name: flights-service
-  cloud:
-    config:
-      fail-fast: true
-      uri: http://localhost:8888&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;services_registration_and_discovery&quot;&gt;&lt;strong&gt;Services Registration and Discovery&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flights-service&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;fail-fast&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8888&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;services-registration-and-discovery&quot;&gt;Services Registration and Discovery&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;Spring Cloud Eureka is used for services registration and discovery. It is also
 created with its appropriate dependency as a regular spring boot application.
-We only need to annotate the application class with &quot;@EnableEurekaServer&quot;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
-@EnableEurekaServer
-public class RegistryServerApp {
+We only need to annotate the application class with “@EnableEurekaServer”&lt;/p&gt;
 
-	public static void main(String[] args) {
-		SpringApplication.run(RegistryServerApp.class, args);
-	}
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableEurekaServer&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RegistryServerApp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RegistryServerApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;and set it such that it would not register itself.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;oauth2_authorization_server&quot;&gt;&lt;strong&gt;OAuth2 Authorization Server&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;eureka&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;register-with-eureka&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;fetch-registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;oauth2-authorization-server&quot;&gt;OAuth2 Authorization Server&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;Creating an OAuth2 authorization server is simple using Spring security and
 OAuth2 dependencies&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
-	&amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-	&amp;lt;artifactId&amp;gt;spring-boot-starter-security&amp;lt;/artifactId&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&amp;lt;dependency&amp;gt;
-	&amp;lt;groupId&amp;gt;org.springframework.security.oauth&amp;lt;/groupId&amp;gt;
-	&amp;lt;artifactId&amp;gt;spring-security-oauth2&amp;lt;/artifactId&amp;gt;
-&amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;As listed in the repo, a configuration class is added with
-&quot;@EnableAuthorizationServer&quot; annotation.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
-@EnableAuthorizationServer
-public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
-  ...
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;A client in this class is defined with Id as &quot;acme&quot;, secret as &quot;acmesecret&quot;,
-different grant types and scopes as &quot;openid&quot;. You can optionally set the scopes auto-approval.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To enable resource servers (backend services) to decode the authorization tokens,
-this server exposes a &quot;../user&quot; endpoint that exposes an authenticated principal.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;As configured, users authenticate using a login form mechanism&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
-public class WebSecurity extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll();
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Although its also appropriate to apply an &quot;Implicit&quot; OAuth2 flow in single page
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.security.oauth&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-security-oauth2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As listed in the repo, a configuration class is added with
+“@EnableAuthorizationServer” annotation.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableAuthorizationServer&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AuthorizationServer&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AuthorizationServerConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A client in this class is defined with Id as “acme”, secret as “acmesecret”,
+different grant types and scopes as “openid”. You can optionally set the scopes auto-approval.&lt;/p&gt;
+
+&lt;p&gt;To enable resource servers (backend services) to decode the authorization tokens,
+this server exposes a “../user” endpoint that exposes an authenticated principal.&lt;/p&gt;
+
+&lt;p&gt;As configured, users authenticate using a login form mechanism&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebSecurity&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebSecurityConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizeRequests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;formLogin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;permitAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Although its also appropriate to apply an “Implicit” OAuth2 flow in single page
 applications, in this illustration example, we will be exercising OAuth2
-&quot;authorization_code&quot; flow.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;front_end_ui_application&quot;&gt;&lt;strong&gt;Front-End UI Application&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+“authorization_code” flow.&lt;/p&gt;
+
+&lt;h2 id=&quot;front-end-ui-application&quot;&gt;Front-End UI Application&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;UI application is implemented using Angular (6). A simple spring boot
 project is also created to serve the client UI application. In order
 to build the Angular module into the spring boot project, a maven plugin is used
-to run &quot;ng build&quot; command during the &quot;validate&quot; stage and direct the output to
-the spring boot &quot;resources&quot; folder.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;plugin&amp;gt;
-  &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;exec-maven-plugin&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;{version}&amp;lt;/version&amp;gt;
-	&amp;lt;executions&amp;gt;
-		&amp;lt;execution&amp;gt;
-			&amp;lt;phase&amp;gt;validate&amp;lt;/phase&amp;gt;
-			&amp;lt;goals&amp;gt;
-				&amp;lt;goal&amp;gt;exec&amp;lt;/goal&amp;gt;
-			&amp;lt;/goals&amp;gt;
-		&amp;lt;/execution&amp;gt;
-	&amp;lt;/executions&amp;gt;
-	&amp;lt;configuration&amp;gt;
-		&amp;lt;executable&amp;gt;ng&amp;lt;/executable&amp;gt;
-		&amp;lt;workingDirectory&amp;gt;../agency-ui&amp;lt;/workingDirectory&amp;gt;
-		&amp;lt;arguments&amp;gt;
-			&amp;lt;argument&amp;gt;build&amp;lt;/argument&amp;gt;
-			&amp;lt;argument&amp;gt;--output-path&amp;lt;/argument&amp;gt;
-			&amp;lt;argument&amp;gt;../agency-frontend/src/main/resources/static&amp;lt;/argument&amp;gt;
-		&amp;lt;/arguments&amp;gt;
-	&amp;lt;/configuration&amp;gt;
-&amp;lt;/plugin&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+to run “ng build” command during the “validate” stage and direct the output to
+the spring boot “resources” folder.&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.codehaus.mojo&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;exec-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;{version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;executions&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;execution&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;phase&amp;gt;&lt;/span&gt;validate&lt;span class=&quot;nt&quot;&gt;&amp;lt;/phase&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;goals&amp;gt;&lt;/span&gt;
+				&lt;span class=&quot;nt&quot;&gt;&amp;lt;goal&amp;gt;&lt;/span&gt;exec&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goal&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goals&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/execution&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/executions&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;executable&amp;gt;&lt;/span&gt;ng&lt;span class=&quot;nt&quot;&gt;&amp;lt;/executable&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;workingDirectory&amp;gt;&lt;/span&gt;../agency-ui&lt;span class=&quot;nt&quot;&gt;&amp;lt;/workingDirectory&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;arguments&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;argument&amp;gt;&lt;/span&gt;build&lt;span class=&quot;nt&quot;&gt;&amp;lt;/argument&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;argument&amp;gt;&lt;/span&gt;--output-path&lt;span class=&quot;nt&quot;&gt;&amp;lt;/argument&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;argument&amp;gt;&lt;/span&gt;../agency-frontend/src/main/resources/static&lt;span class=&quot;nt&quot;&gt;&amp;lt;/argument&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/arguments&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;This UI client application represents one of the secured resources behind the
 edge proxy, it also registered in Eureka to be discovered and routed by the proxy.
-Therefore, a configuration class marked with &quot;@EnableResourceServer&quot;
+Therefore, a configuration class marked with “@EnableResourceServer”
 annotation is added to authorize access to the client application while allowing
-some of its &quot;actuator&quot; administration endpoints that are needed by Eureka&amp;#8217;s health
+some of its “actuator” administration endpoints that are needed by Eureka’s health
 checking.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .requestMatcher(new RequestHeaderRequestMatcher(&quot;Authorization&quot;))
-                .authorizeRequests()
-                .antMatchers(&quot;/admin/info&quot;, &quot;/admin/health/**&quot;).permitAll()  // allow actuator endpoints
-                .anyRequest().authenticated();
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;resource_servers_back_end_services&quot;&gt;&lt;strong&gt;Resource Servers / Back-End Services&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableResourceServer&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ResourceServerConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ResourceServerConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;requestMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RequestHeaderRequestMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Authorization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizeRequests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;antMatchers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/admin/info&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/admin/health/**&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;permitAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// allow actuator endpoints&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;resource-servers--back-end-services&quot;&gt;Resource Servers / Back-End Services&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;There are two resource servers as backend services. A reservation service that
 helps to search flights, perform booking and issue confirmations. In order to
 perform its function, this service utilizes a downstream flights service that
 only acts as data-as-a-service to retrieve information from a database of flights
 information.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;The reservation service uses Spring Cloud Feign as a client to interact with the
 flights data service.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;flights_data_service&quot;&gt;&lt;strong&gt;Flights data service&lt;/strong&gt;&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;h3 id=&quot;flights-data-service&quot;&gt;Flights data service&lt;/h3&gt;
+
 &lt;p&gt;Flights data service is implemented using Spring Data to retrieve flights information
 from a backend database (H2). Spring Data Rest is used to expose Flight search
 results. One can search a flight passing in an origin airport, destination
 airport, besides travel and return dates.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@RepositoryRestResource(collectionResourceRel = &quot;flights&quot;, path = &quot;flights&quot;)
-public interface FlightRepository extends PagingAndSortingRepository&amp;lt;Flight, Long&amp;gt; {
 
-	@RestResource(path = &quot;datedlegs&quot;, rel = &quot;datedlegs&quot;)
-	@Query(&quot;SELECT f FROM Flight f WHERE f.origin = ?1 AND f.destination = ?2 &quot;
-			+ &quot; AND f.departure between ?3 and ?4&quot;)
-	public List&amp;lt;Flight&amp;gt; findFlightsByCustomQueryDated(@Param(&quot;origin&quot;) String origin,
-			@Param(&quot;destination&quot;) String destination,
-			@Param(&quot;mindate&quot;) @DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;) Date mindate,
-			@Param(&quot;maxdate&quot;) @DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;) Date maxdate);
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RepositoryRestResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collectionResourceRel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;flights&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;flights&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FlightRepository&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PagingAndSortingRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Flight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-...
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+	&lt;span class=&quot;nd&quot;&gt;@RestResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;datedlegs&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;datedlegs&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;nd&quot;&gt;@Query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SELECT f FROM Flight f WHERE f.origin = ?1 AND f.destination = ?2 &quot;&lt;/span&gt;
+			&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; AND f.departure between ?3 and ?4&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Flight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findFlightsByCustomQueryDated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;origin&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;destination&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;destination&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mindate&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@DateTimeFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mindate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;maxdate&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@DateTimeFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxdate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;This service is also an OAuth2 secured resource server that includes same OAuth2
-dependencies and &quot;ResourceServerConfig&quot; configuration class as in the Client
+dependencies and “ResourceServerConfig” configuration class as in the Client
 application.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;reservations_service&quot;&gt;&lt;strong&gt;Reservations service&lt;/strong&gt;&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The reservation class is a Spring Boot application that exposes &quot;/search&quot; and
-&quot;/book&quot; endpoints in a RestController. As a secured OAuth2 resource server, this
-service includes same OAuth2 dependencies and &quot;ResourceServerConfig&quot; configuration
+
+&lt;h3 id=&quot;reservations-service&quot;&gt;Reservations service&lt;/h3&gt;
+
+&lt;p&gt;The reservation class is a Spring Boot application that exposes “/search” and
+“/book” endpoints in a RestController. As a secured OAuth2 resource server, this
+service includes same OAuth2 dependencies and “ResourceServerConfig” configuration
 class as in the Client application.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
 &lt;p&gt;To pass the authorization token of an authenticated client downstream when using
-a Feign client, this service includes a &quot;RequestInterceptor&quot; to inject the token
-in a header of the &quot;RequestTemplate&quot;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@Component
-public class FlightClientInterceptor implements RequestInterceptor {
-    private static final String AUTHORIZATION_HEADER = &quot;Authorization&quot;;
-    private static final String BEARER_TOKEN_TYPE = &quot;Bearer&quot;;
+a Feign client, this service includes a “RequestInterceptor” to inject the token
+in a header of the “RequestTemplate”.&lt;/p&gt;
 
-    @Override
-    public void apply(RequestTemplate template) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FlightClientInterceptor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RequestInterceptor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTHORIZATION_HEADER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Authorization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BEARER_TOKEN_TYPE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Bearer&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-        if (authentication != null &amp;amp;&amp;amp; authentication.getDetails() instanceof OAuth2AuthenticationDetails) {
-            OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
-            template.header(AUTHORIZATION_HEADER, String.format(&quot;%s %s&quot;, BEARER_TOKEN_TYPE, details.getTokenValue()));
-        }
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;edge_proxy&quot;&gt;&lt;strong&gt;Edge Proxy&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RequestTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SecurityContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;securityContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SecurityContextHolder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Authentication&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;securityContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAuthentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationDetails&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;details&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuth2AuthenticationDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authentication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDetails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AUTHORIZATION_HEADER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%s %s&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BEARER_TOKEN_TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getTokenValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;edge-proxy&quot;&gt;Edge Proxy&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;Spring Cloud Zuul is used to implement the edge proxy. All access to backend
 services including the client application itself would go through this proxy.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The application&amp;#8217;s main class is marked with &quot;@EnableZuulProxy&quot; and OAuth2 Single
-Sign-On &quot;@EnableOAuth2Sso&quot; annotations.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;p&gt;The application’s main class is marked with “@EnableZuulProxy” and OAuth2 Single
+Sign-On “@EnableOAuth2Sso” annotations.&lt;/p&gt;
+
 &lt;p&gt;Single Sign On feature is&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
-@EnableZuulProxy
-@EnableOAuth2Sso
-public class GatewayApp {
-  ...
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableZuulProxy&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableOAuth2Sso&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GatewayApp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;Routes are defined for this application as shown below. The server is exposed
-with port 8080, default URL &quot;http://localhost:8080&quot; would route to the UI client
+with port 8080, default URL “http://localhost:8080” would route to the UI client
 application index page. Routes to other two backend reservations and flights
 services are also configured.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;zuul:
-  ignoredServices: '*'
-  routes:
-    flights:
-      path: /flights/**
-      serviceId: FLIGHTS-SERVICE
-    reservations:
-      path: /reservations/**
-      serviceId: RESERVATIONS-SERVICE
-    ui:
-      path: /**
-      url: AGENCY-FRONTEND&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;zuul&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;ignoredServices&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;*'&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;flights&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/flights/**&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;serviceId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;FLIGHTS-SERVICE&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;reservations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/reservations/**&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;serviceId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;RESERVATIONS-SERVICE&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/**&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;AGENCY-FRONTEND&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;Token relay feature to other proxied services is used, to enable that we need to
 include this dependency:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;CodeRay highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
-	&amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;
-	&amp;lt;artifactId&amp;gt;spring-cloud-starter-security&amp;lt;/artifactId&amp;gt;
-&amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.cloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-starter-security&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;olist lowerroman&quot;&gt;
-&lt;ol class=&quot;lowerroman&quot; type=&quot;i&quot;&gt;
-&lt;li&gt;
-&lt;p&gt;todo &amp;#8230;&amp;#8203;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;application_flow&quot;&gt;&lt;strong&gt;Application Flow&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;… todo …&lt;/p&gt;
+
+&lt;h2 id=&quot;application-flow&quot;&gt;Application Flow**&lt;/h2&gt;
+&lt;hr /&gt;
+
 &lt;p&gt;After launching all the applications in this example&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/apps-launched.png&quot; alt=&quot;launch&quot; width=&quot;300&quot; height=&quot;150&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;When accessing &lt;a href=&quot;http://localhost:8080&quot; class=&quot;bare&quot;&gt;http://localhost:8080&lt;/a&gt;, you will be directed to a login screen
-to authenticate. Use username as &quot;user&quot;, password as &quot;password&quot;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/login-screen.png&quot; alt=&quot;login&quot; width=&quot;300&quot; height=&quot;150&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;You will then be asked to authorize the scope, click on &quot;Approve&quot;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/authorize.png&quot; alt=&quot;authorize&quot; width=&quot;350&quot; height=&quot;200&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;After approving the scope you will be landed at the application&amp;#8217;s homepage&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;../images/spring-oauth2-gen1/home-page.png&quot; alt=&quot;homepage&quot; width=&quot;450&quot; height=&quot;300&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;You can search flights from &quot;AUS&quot; to &quot;IAH&quot; airports, traveling 5/5/2018 and
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/apps-launched.png&quot; width=&quot;20%&quot; height=&quot;20%&quot; title=&quot;app launch&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;When accessing http://localhost:8080, you will be directed to a login screen
+to authenticate. Use username as “user”, password as “password”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/login-screen.png&quot; width=&quot;30%&quot; height=&quot;30%&quot; title=&quot;login screen&quot; border=&quot;3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You will then be asked to authorize the scope, click on “Approve”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/authorize.png&quot; width=&quot;30%&quot; height=&quot;30%&quot; title=&quot;authorize&quot; border=&quot;3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After approving the scope you will be landed at the application’s homepage&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/home-page.png&quot; width=&quot;40%&quot; height=&quot;40%&quot; title=&quot;home page&quot; border=&quot;3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can search flights from “AUS” to “IAH” airports, traveling 5/5/2018 and
 returning 5/22/2018&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;code_repository&quot;&gt;&lt;strong&gt;Code Repository&lt;/strong&gt;&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Please reference this example&amp;#8217;s code in its
-&lt;a href=&quot;https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2&quot;&gt;Github&lt;/a&gt;
-repository, branch name is &quot;separate-proxy-oauth2&quot;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">This article describes how to secure an application using Spring security OAuth2 generation-one.</summary></entry></feed>
+
+&lt;h2 id=&quot;code-repository&quot;&gt;Code Repository&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;Please reference this example’s code in its
+&lt;a href=&quot;https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2&quot;&gt;GitHub&lt;/a&gt;
+repository, branch name is “separate-proxy-oauth2”.&lt;/p&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">This article describes how to secure an application using Spring security OAuth2 generation-one. The sample consists of an Angular front-end application and a couple of Spring boot based backend services. Both frontend application and backend services are behind an edge proxy that assumes the responsibility to authenticate and authorize a user. Spring Cloud common services such as spring cloud configuration and spring cloud Eureka registry services are used.</summary></entry></feed>

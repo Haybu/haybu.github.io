@@ -11,10 +11,10 @@ and backend services are behind an edge proxy that assumes the responsibility
 to authenticate and authorize a user. Spring Cloud common services such as
 spring cloud configuration and spring cloud Eureka registry services are used.
 
-== **Architecture**
-***
+## Architecture
+----
 
-image::../images/spring-oauth2-gen1/RA-OAuth2-1.png[architecture,500,300]
+<img src="../images/spring-oauth2-gen1/RA-OAuth2-1.png" width="50%" height="50%" title="architecture">
 
 All components are behind an edge proxy service. Spring Cloud Zuul is used as
 the edge service. A user launch the application using a route to the landing
@@ -36,8 +36,8 @@ manage security, logging and other common concerns
 4- Use of a Feign intercepter to inject authentication token when communicating
 to a downstream backend Flights data service.
 
-== **Services Configuration**
-***
+## Services Configuration
+----
 
 Spring Cloud Config Server is used externalize all modules configurations.
 For easy launching, the configuration server launches with a native profile to
@@ -47,7 +47,7 @@ With the appropriate dependencies, you can create a configuration server as
 a regular spring boot application by enabling the server with "@EnableConfigServer"
 annotation.
 
-```
+``` java
 @SpringBootApplication
 @EnableConfigServer
 public class ConfigServerApp {
@@ -61,7 +61,7 @@ public class ConfigServerApp {
 
 One can start the configuration server with the following settings:
 
-```
+```yml
 spring:
   profiles: native
   cloud:
@@ -74,7 +74,7 @@ spring:
 As in this sample, you can keep all the "yml" configuration files in some local
 storage path:
 
-image::../images/spring-oauth2-gen1/config-files.png[config-files,250,200]
+<img src="../images/spring-oauth2-gen1/config-files.png" width="20%" height="20%" title="config files" border="2">
 
 Each configuration file is named after the name of the corresponding configured
 application and as defined by "spring.application.name" property in that application.
@@ -84,7 +84,7 @@ defined in each application's "bootstrap.yml" file inside the "resources" folder
 For instance, the flights data service would have a "bootstrap.yml" file with a
 content such as:
 
-```
+```yml
 spring:
   application:
     name: flights-service
@@ -95,14 +95,14 @@ spring:
 ```
 
 
-== **Services Registration and Discovery**
-***
+## Services Registration and Discovery
+----
 
 Spring Cloud Eureka is used for services registration and discovery. It is also
 created with its appropriate dependency as a regular spring boot application.
 We only need to annotate the application class with "@EnableEurekaServer"
 
-```
+```java
 @SpringBootApplication
 @EnableEurekaServer
 public class RegistryServerApp {
@@ -115,20 +115,20 @@ public class RegistryServerApp {
 
 and set it such that it would not register itself.
 
-```
+```yml
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
 ```
 
-== **OAuth2 Authorization Server**
-***
+## OAuth2 Authorization Server
+----
 
 Creating an OAuth2 authorization server is simple using Spring security and
 OAuth2 dependencies
 
-```
+```xml
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-security</artifactId>
@@ -142,7 +142,7 @@ OAuth2 dependencies
 As listed in the repo, a configuration class is added with
 "@EnableAuthorizationServer" annotation.
 
-```
+```java
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
@@ -158,7 +158,7 @@ this server exposes a "../user" endpoint that exposes an authenticated principal
 
 As configured, users authenticate using a login form mechanism
 
-```
+```java
 @Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
@@ -176,8 +176,8 @@ Although its also appropriate to apply an "Implicit" OAuth2 flow in single page
 applications, in this illustration example, we will be exercising OAuth2
 "authorization_code" flow.
 
-== **Front-End UI Application**
-***
+## Front-End UI Application
+----
 
 UI application is implemented using Angular (6). A simple spring boot
 project is also created to serve the client UI application. In order
@@ -185,7 +185,7 @@ to build the Angular module into the spring boot project, a maven plugin is used
 to run "ng build" command during the "validate" stage and direct the output to
 the spring boot "resources" folder.
 
-```
+``` xml
 <plugin>
   <groupId>org.codehaus.mojo</groupId>
   <artifactId>exec-maven-plugin</artifactId>
@@ -217,7 +217,7 @@ annotation is added to authorize access to the client application while allowing
 some of its "actuator" administration endpoints that are needed by Eureka's health
 checking.
 
-```
+``` java
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -233,8 +233,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 }
 ```
 
-== **Resource Servers / Back-End Services**
-***
+## Resource Servers / Back-End Services
+----
 
 There are two resource servers as backend services. A reservation service that
 helps to search flights, perform booking and issue confirmations. In order to
@@ -245,14 +245,14 @@ information.
 The reservation service uses Spring Cloud Feign as a client to interact with the
 flights data service.
 
-=== *Flights data service*
+### Flights data service
 
 Flights data service is implemented using Spring Data to retrieve flights information
 from a backend database (H2). Spring Data Rest is used to expose Flight search
 results. One can search a flight passing in an origin airport, destination
 airport, besides travel and return dates.
 
-```
+``` java
 @RepositoryRestResource(collectionResourceRel = "flights", path = "flights")
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long> {
 
@@ -272,7 +272,7 @@ This service is also an OAuth2 secured resource server that includes same OAuth2
 dependencies and "ResourceServerConfig" configuration class as in the Client
 application.
 
-=== *Reservations service*
+### Reservations service
 
 The reservation class is a Spring Boot application that exposes "/search" and
 "/book" endpoints in a RestController. As a secured OAuth2 resource server, this
@@ -283,7 +283,7 @@ To pass the authorization token of an authenticated client downstream when using
 a Feign client, this service includes a "RequestInterceptor" to inject the token
 in a header of the "RequestTemplate".
 
-```
+``` java
 @Component
 public class FlightClientInterceptor implements RequestInterceptor {
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -302,8 +302,8 @@ public class FlightClientInterceptor implements RequestInterceptor {
 }
 ```
 
-== **Edge Proxy**
-***
+## Edge Proxy
+----
 
 Spring Cloud Zuul is used to implement the edge proxy. All access to backend
 services including the client application itself would go through this proxy.
@@ -313,7 +313,7 @@ Sign-On "@EnableOAuth2Sso" annotations.
 
 Single Sign On feature is
 
-```
+``` java
 @SpringBootApplication
 @EnableZuulProxy
 @EnableOAuth2Sso
@@ -327,7 +327,7 @@ with port 8080, default URL "http://localhost:8080" would route to the UI client
 application index page. Routes to other two backend reservations and flights
 services are also configured.
 
-```
+``` yml
 zuul:
   ignoredServices: '*'
   routes:
@@ -345,44 +345,44 @@ zuul:
 Token relay feature to other proxied services is used, to enable that we need to
 include this dependency:
 
-```
+``` xml
 <dependency>
 	<groupId>org.springframework.cloud</groupId>
 	<artifactId>spring-cloud-starter-security</artifactId>
 </dependency>
 ```
 
-== Testing
-***
+## Testing
+----
 
  ... todo ...
 
-== **Application Flow**
-***
+## Application Flow**
+----
 
 After launching all the applications in this example
 
-image::../images/spring-oauth2-gen1/apps-launched.png[launch, 300,150]
+<img src="../images/spring-oauth2-gen1/apps-launched.png" width="20%" height="20%" title="app launch">
 
 When accessing http://localhost:8080, you will be directed to a login screen
 to authenticate. Use username as "user", password as "password"
 
-image::../images/spring-oauth2-gen1/login-screen.png[login,300,150]
+<img src="../images/spring-oauth2-gen1/login-screen.png" width="30%" height="30%" title="login screen" border="3">
 
 You will then be asked to authorize the scope, click on "Approve"
 
-image::../images/spring-oauth2-gen1/authorize.png[authorize,350,200]
+<img src="../images/spring-oauth2-gen1/authorize.png" width="30%" height="30%" title="authorize" border="3">
 
 After approving the scope you will be landed at the application's homepage
 
-image::../images/spring-oauth2-gen1/home-page.png[homepage,450,300]
+<img src="../images/spring-oauth2-gen1/home-page.png" width="40%" height="40%" title="home page" border="3">
 
 You can search flights from "AUS" to "IAH" airports, traveling 5/5/2018 and
 returning 5/22/2018
 
-== **Code Repository**
-***
+## Code Repository
+----
 
 Please reference this example's code in its
-https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2[Github]
+[GitHub](https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2)
 repository, branch name is "separate-proxy-oauth2".
