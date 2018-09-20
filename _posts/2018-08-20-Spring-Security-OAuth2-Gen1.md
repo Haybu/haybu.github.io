@@ -355,9 +355,127 @@ include this dependency:
 ## Testing
 ----
 
- ... todo ...
+Unit and integration tests were written on the backend services. Different spring boot test slices were used, such as the one to test the backend database repositories teir using `@DataJpaTest` annotation, and any middle orchestrating service class or components using just a Mockito test runner. As the backend services depend on external services such as a configuration and registration services, these tests were disabled from such dependencies by annotating the test classes with:
 
-## Application Flow**
+``` java
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "eureka.client.register-with-eureka=false",
+        "eureka.client.fetch-registry=false"
+})
+```
+
+What gets interesting is when testing the MVC layer because of the OAuth2 security enablement. Spring Security offers new annotations to mock an authenticated user (see the [documentation](https://docs.spring.io/spring-security/site/docs/current/reference/html/test-method.html)). You can easily test a secured application by mocking a user with specified username and authorities. However, to account for having a mocked OAuth2 token, you may need to build an OAuth2Authentication token type in the application's security context. Spring security test framework can help you with creating such token by implementating the factory interface `org.springframework.security.test.context.support.WithSecurityContextFactory`. With this security context factory you can synthesize a token from an identified subject data that could be provided by a demarcating annotation. 
+
+Let's call this demarcating security subject annotation "WithOAuthSubject", it could include a dummy subject ID and its defintion may look like:
+
+``` java
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@WithSecurityContext(factory = WithOAuthSubjectSecurityContextFactory.class)
+public @interface WithOAuthSubject {
+    String[] scopes() default {"openid"};
+
+    String subjectId() default "a1de7cc9-1b3a-4ecd-96fa-dab6059ccf6f";
+}
+```
+
+The processing security context factory `WithOAuthSubjectSecurityContextFactory` uses this annotation data, builds an OAuth2 authentication token and sets that into the security context.
+
+``` java
+public class WithOAuthSubjectSecurityContextFactory implements WithSecurityContextFactory<WithOAuthSubject> {
+
+    private DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
+
+    @Override
+    public SecurityContext createSecurityContext(WithOAuthSubject withOAuthSubject) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+        // some mocked token claims as of from a provider, for example please refer to the code sample
+        Map<String, ?> remoteToken = ...
+
+        OAuth2Authentication authentication = defaultAccessTokenConverter.extractAuthentication(remoteToken);
+        context.setAuthentication(authentication);
+        return context;
+    }
+}
+```
+
+You need also to setup your tests to configure OAuth2 security, enabling OAuth2 client and resource server, if needed you can also enable OAuth2 method security:
+
+``` java
+@Configuration
+@EnableOAuth2Client
+@EnableResourceServer
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class MySecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/v1/**").authenticated();
+    }
+
+}
+```
+
+This configuration can be included with "OAuth2AutoConfiguration" to enable OAuth2 autoconfiguration:
+
+``` java
+@TestConfiguration
+@Import({MySecurityConfig.class, OAuth2AutoConfiguration.class})
+public class SecurityTestConfig { }
+```
+
+With that you can test the MVC slice starting with some setup to enable MVC test, import the above OAuth2 security autoconfiguration (along with the custom OAuth2 adapter), and disable to depend on any 
+external services (configuration and registration services). You can utilize a mocked bean of a `ResourceServerTokenServices` to load a token from the security context.
+
+``` java
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(ReservationController.class)
+@Import(SecurityTestConfig.class)
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "eureka.client.register-with-eureka=false",
+        "eureka.client.fetch-registry=false"
+})
+public class ReservationControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    public ResourceServerTokenServices resourceServerTokenServices;
+
+       @Before
+    public void setup() {
+        // Stub the remote call that loads the authentication object
+        when(resourceServerTokenServices.loadAuthentication(anyString()))
+                .thenAnswer(invocation -> SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    ...
+
+}
+```
+
+To run any test, annotate the method with `@WithOAuthSubject` and do not forget to set a header on the mockMvc object with "Authorization" header that includes a dummy bearer token.
+
+``` java
+@Test
+@WithOAuthSubject
+public void testMethod() throws Exception {
+  mockMvc.perform(..url..).header(AUTHORIZATION, "Bearer foo"))
+      .andExpect(...)
+      ....
+      ;
+}
+```
+
+## Application Flow
 ----
 
 After launching all the applications in this example
@@ -384,5 +502,5 @@ returning 5/22/2018
 ----
 
 Please reference this example's code in its
-[GitHub](https://github.com/Haybu/RA-1-OAuth2/tree/separate-proxy-oauth2)
-repository, branch name is "separate-proxy-oauth2".
+[GitHub](https://github.com/Haybu/RA-OAuth2-Gen1)
+repository.
