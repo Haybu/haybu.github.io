@@ -6,7 +6,7 @@ author: Haytham Mohamed
 
 This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
-and a couple of Spring boot based backend services. Both frontend application
+and a couple of Spring boot based backend services. Both front-end application
 and backend services are behind an edge proxy that assumes the responsibility
 to authenticate and authorize a user. Spring Cloud common services such as
 spring cloud configuration and spring cloud Eureka registry services are used.
@@ -17,19 +17,21 @@ spring cloud configuration and spring cloud Eureka registry services are used.
 <img src="../images/spring-oauth2-gen1/RA-OAuth2-1.png" width="50%" height="50%" title="architecture">
 
 All components are behind an edge proxy service. Spring Cloud Zuul is used as
-the edge service. A user launch the application using a route to the landing
+the edge service. A user launches the application using a route to a landing
 index page of the front-end UI application. The front-end UI is implemented as
 an Angular-based separate project that compiled and packaged into a spring-boot
 application. The front-end UI application reaches out to a backend reservations
-service through the edge proxy. The reservations services in turn seeks flights
+service through an edge proxy. The reservations service in turn seeks flights
 information by routing via the edge proxy to another backend flights data service.
+While the detail implementation of the business logic is not important, the sample
+illustrates how to use OAuth2 (Authorization grant) method to secure the application.
 
 This architecture enables us to have the following:
 
-1- Communications between all modules to go through an edge-service to centrally
+1- Communications between all modules to go through an edge-proxy service to centrally
 manage security, logging and other common concerns
 
-2- Use of authentication token relay between edge proxy service and front-end UI application
+2- Use of authentication token relay between edge-proxy service and front-end UI application
 
 3- Use of Spring Feign to communicate between the two backend services
 
@@ -39,11 +41,11 @@ to a downstream backend Flights data service.
 ## Services Configuration
 ----
 
-Spring Cloud Config Server is used externalize all modules configurations.
+Spring Cloud Config Server is used to externalize configurations of the different modules in the application.
 For easy launching, the configuration server launches with a native profile to
-leverage a local backend storage to keep the "yml" properties files.
+leverage a local backend storage to keep the "yml" properties files (please change any hard-coded path).
 
-With the appropriate dependencies, you can create a configuration server as
+With appropriate dependencies, you can create a configuration server as
 a regular spring boot application by enabling the server with "@EnableConfigServer"
 annotation.
 
