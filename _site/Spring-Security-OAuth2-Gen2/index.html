@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spring Security OAuth2 Second Generation – Haytham Mohamed – Advisory Solutions Architect @Pivotal</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Spring framework provides a comprehensive and extensible support for authentication
+and authorization. Latest enhancements in Spring 5.x have made it simple
+to apply security standards such as OAuth2 to secure applications. In this blog I will
+demonstrate how to use OAuth2 second-generation support in Spring framework to
+secure a distributed microservices application.
+
+" />
+    <meta property="og:description" content="Spring framework provides a comprehensive and extensible support for authentication
+and authorization. Latest enhancements in Spring 5.x have made it simple
+to apply security standards such as OAuth2 to secure applications. In this blog I will
+demonstrate how to use OAuth2 second-generation support in Spring framework to
+secure a distributed microservices application.
+
+" />
+    
+    <meta name="author" content="Haytham Mohamed" />
+
+    
+    <meta property="og:title" content="Spring Security OAuth2 Second Generation" />
+    <meta property="twitter:title" content="Spring Security OAuth2 Second Generation" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="Haytham Mohamed - Advisory Solutions Architect @Pivotal" href="/feed.xml" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+  </head>
+
+  <body>
+    
+    
+    <div class="intro-header">    
+      <div class="container">
+        <div class="post-heading">
+            <h1>Spring Security OAuth2 Second Generation</h1>
+            <!--
+            <span class="meta">Posted by <a href="/about"> Haytham Mohamed
+            </a> on November 11, 2018
+            -->
+            <span class="meta"> November 11, 2018
+            <a href="/"> { Return to Blog }</a>
+            </span>
+        </div>
+            
+      </div>
+    </div>
+    
+
+    <div id="main" role="main" class="postcontainer">
+      <article class="post">
+ <div class="space-extra-small">
+ </div>
+
+  <div class="entry">
+    <p>Spring framework provides a comprehensive and extensible support for authentication
+and authorization. Latest enhancements in Spring 5.x have made it simple
+to apply security standards such as OAuth2 to secure applications. In this blog I will
+demonstrate how to use OAuth2 second-generation support in Spring framework to
+secure a distributed microservices application.</p>
+
+<h2 id="architecture">Architecture</h2>
+<hr />
+
+<p>A simple “Flight Agency” demo application will be used in this
+blog to illustrate using the latest Spring 5.x security features of OAuth2 to
+support microservices authentication and authorization.</p>
+
+<p>The architecture of the distributed demo application consists of a
+front-end web application and a couple of backend microservices. All modules of
+the application are implemented using Spring Boot to take advantage of the
+auto-configuration and opinionated features. As illustrated in the diagram below,
+The system consists of</p>
+
+<p><img src="../images/spring-oauth2-gen2/RA-OAuth2-2.png" width="50%" height="50%" title="architecture" /></p>
+
+<ul>
+  <li>
+    <p>Front-end Web application implemented using Tymeleaf. The application allows
+a user to search for a flight from an origin to a destination within
+certain dates, select and book the itinerary flights (called agency-web).</p>
+  </li>
+  <li>
+    <p>A back-end service to retrieve available itinerary flights (called flights-service).</p>
+  </li>
+  <li>
+    <p>A back-end service to perform reservations and book the itinerary (called reservations-service)</p>
+  </li>
+</ul>
+
+<p>Additionally, the application demo uses common services implemented with Spring
+cloud (Spring Boot based), such as:</p>
+
+<ul>
+  <li>
+    <p>A configuration server to externalize and centralize microservices’ configurations.</p>
+  </li>
+  <li>
+    <p>A registration and discovery service using Spring Cloud Eureka implementation to
+help service to register and discover each other.</p>
+  </li>
+  <li>
+    <p>A Spring Cloud Gateway, as an edge proxy in front of the two backend services
+of flights and reservations.</p>
+  </li>
+</ul>
+
+<h2 id="web-application---oauth2-client">Web Application - OAuth2 Client</h2>
+<hr />
+
+  </div>
+
+  
+</article>
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+            <div class="svg-icon">
+          
+<a href="mailto:hmohamed@pivotal.io"><i class="icon-envelope icon-2x"></i></a>
+
+
+<a href="https://github.com/haybu"><i class="icon-github icon-2x"></i></a>
+
+<a href="https://www.linkedin.com/in/haytham-mohamed-6636408"><i class="icon-linkedin-sign icon-2x"></i></a>
+
+
+<a href="https://www.twitter.com/haymahmoh"><i class="icon-twitter icon-2x"></i></a>
+
+
+
+
+            </div>
+        </footer>
+      </div>
+    </div>
+
+
+    
+
+  </body>
+</html>

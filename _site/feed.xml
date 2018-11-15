@@ -1,6 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-10T20:13:19-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-14T21:17:49-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible support for authentication
+and authorization. Latest enhancements in Spring 5.x have made it simple
+to apply security standards such as OAuth2 to secure applications. In this blog I will
+demonstrate how to use OAuth2 second-generation support in Spring framework to
+secure a distributed microservices application.&lt;/p&gt;
+
+&lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;A simple “Flight Agency” demo application will be used in this
+blog to illustrate using the latest Spring 5.x security features of OAuth2 to
+support microservices authentication and authorization.&lt;/p&gt;
+
+&lt;p&gt;The architecture of the distributed demo application consists of a
+front-end web application and a couple of backend microservices. All modules of
+the application are implemented using Spring Boot to take advantage of the
+auto-configuration and opinionated features. As illustrated in the diagram below,
+The system consists of&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen2/RA-OAuth2-2.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Front-end Web application implemented using Tymeleaf. The application allows
+a user to search for a flight from an origin to a destination within
+certain dates, select and book the itinerary flights (called agency-web).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A back-end service to retrieve available itinerary flights (called flights-service).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A back-end service to perform reservations and book the itinerary (called reservations-service)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Additionally, the application demo uses common services implemented with Spring
+cloud (Spring Boot based), such as:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;A configuration server to externalize and centralize microservices’ configurations.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A registration and discovery service using Spring Cloud Eureka implementation to
+help service to register and discover each other.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A Spring Cloud Gateway, as an edge proxy in front of the two backend services
+of flights and reservations.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;web-application---oauth2-client&quot;&gt;Web Application - OAuth2 Client&lt;/h2&gt;
+&lt;hr /&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">Spring framework provides a comprehensive and extensible support for authentication and authorization. Latest enhancements in Spring 5.x have made it simple to apply security standards such as OAuth2 to secure applications. In this blog I will demonstrate how to use OAuth2 second-generation support in Spring framework to secure a distributed microservices application.</summary></entry><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
-and a couple of Spring boot based backend services. Both frontend application
+and a couple of Spring boot based backend services. Both front-end application
 and backend services are behind an edge proxy that assumes the responsibility
 to authenticate and authorize a user. Spring Cloud common services such as
 spring cloud configuration and spring cloud Eureka registry services are used.&lt;/p&gt;
@@ -11,19 +64,21 @@ spring cloud configuration and spring cloud Eureka registry services are used.&l
 &lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen1/RA-OAuth2-1.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;All components are behind an edge proxy service. Spring Cloud Zuul is used as
-the edge service. A user launch the application using a route to the landing
+the edge service. A user launches the application using a route to a landing
 index page of the front-end UI application. The front-end UI is implemented as
 an Angular-based separate project that compiled and packaged into a spring-boot
 application. The front-end UI application reaches out to a backend reservations
-service through the edge proxy. The reservations services in turn seeks flights
-information by routing via the edge proxy to another backend flights data service.&lt;/p&gt;
+service through an edge proxy. The reservations service in turn seeks flights
+information by routing via the edge proxy to another backend flights data service.
+While the detail implementation of the business logic is not important, the sample
+illustrates how to use OAuth2 (Authorization grant) method to secure the application.&lt;/p&gt;
 
 &lt;p&gt;This architecture enables us to have the following:&lt;/p&gt;
 
-&lt;p&gt;1- Communications between all modules to go through an edge-service to centrally
+&lt;p&gt;1- Communications between all modules to go through an edge-proxy service to centrally
 manage security, logging and other common concerns&lt;/p&gt;
 
-&lt;p&gt;2- Use of authentication token relay between edge proxy service and front-end UI application&lt;/p&gt;
+&lt;p&gt;2- Use of authentication token relay between edge-proxy service and front-end UI application&lt;/p&gt;
 
 &lt;p&gt;3- Use of Spring Feign to communicate between the two backend services&lt;/p&gt;
 
@@ -33,11 +88,11 @@ to a downstream backend Flights data service.&lt;/p&gt;
 &lt;h2 id=&quot;services-configuration&quot;&gt;Services Configuration&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;Spring Cloud Config Server is used externalize all modules configurations.
+&lt;p&gt;Spring Cloud Config Server is used to externalize configurations of the different modules in the application.
 For easy launching, the configuration server launches with a native profile to
-leverage a local backend storage to keep the “yml” properties files.&lt;/p&gt;
+leverage a local backend storage to keep the “yml” properties files (please change any hard-coded path).&lt;/p&gt;
 
-&lt;p&gt;With the appropriate dependencies, you can create a configuration server as
+&lt;p&gt;With appropriate dependencies, you can create a configuration server as
 a regular spring boot application by enabling the server with “@EnableConfigServer”
 annotation.&lt;/p&gt;
 
@@ -474,4 +529,4 @@ returning 5/22/2018&lt;/p&gt;
 
 &lt;p&gt;Please reference this example’s code in its
 &lt;a href=&quot;https://github.com/Haybu/RA-OAuth2-Gen1&quot;&gt;GitHub&lt;/a&gt;
-repository.&lt;/p&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">This article describes how to secure an application using Spring security OAuth2 generation-one. The sample consists of an Angular front-end application and a couple of Spring boot based backend services. Both frontend application and backend services are behind an edge proxy that assumes the responsibility to authenticate and authorize a user. Spring Cloud common services such as spring cloud configuration and spring cloud Eureka registry services are used.</summary></entry></feed>
+repository.&lt;/p&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">This article describes how to secure an application using Spring security OAuth2 generation-one. The sample consists of an Angular front-end application and a couple of Spring boot based backend services. Both front-end application and backend services are behind an edge proxy that assumes the responsibility to authenticate and authorize a user. Spring Cloud common services such as spring cloud configuration and spring cloud Eureka registry services are used.</summary></entry></feed>
