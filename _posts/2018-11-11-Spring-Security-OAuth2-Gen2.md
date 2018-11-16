@@ -4,21 +4,23 @@ title: Spring Security OAuth2 Second Generation
 author: Haytham Mohamed
 ---
 
-Spring framework provides a comprehensive and extensible support for authentication
-and authorization. Latest enhancements in Spring 5.x have made it simple
+Spring framework provides a comprehensive and extensible authentication
+and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
-secure a distributed microservices application.
+secure a distributed and reactive-based microservices application.
 
 ## Architecture
 ----
 
-A simple "Flight Agency" demo application will be used in this
-blog to illustrate using the latest Spring 5.x security features of OAuth2 to
-support microservices authentication and authorization. The architecture of the
-distributed demo application consists of a front-end web application and a couple
+A "Flight Agency" demo application will be used in this
+blog to illustrate applying the latest Springframework 5.x security features of OAuth2 to
+help securing a distributed microservices application. The architecture of the
+demo application consists of a front-end web application and a couple
 of backend microservices. All modules of the application are implemented using
 Spring Boot to take advantage of the auto-configuration and opinionated features.
+All applications are also implemented with reactive WebFlux support provided by
+Springframework.
 
 As illustrated in the diagram below, the system consists of:
 
@@ -27,23 +29,20 @@ a user to search for a flight from an origin to a destination within
 certain dates, select and book the itinerary flights (called agency-web).
 
 * A back-end service to retrieve available itinerary flights (called flights-service).
-
 * A back-end service to perform reservations and book the itinerary (called reservations-service)
 
 Additionally, the application demo uses common services implemented with Spring
 cloud (Spring Boot based), such as:
 
 * A configuration server to externalize and centralize microservices' configurations.
-
 * A registration and discovery service using Spring Cloud Eureka implementation to
 help service to register and discover each other.
-
 * A Spring Cloud Gateway, as an edge proxy in front of the two backend services
 of flights and reservations.
 
 <img src="../images/spring-oauth2-gen2/RA-OAuth2-2.png" width="50%" height="50%" title="architecture">
 
-## Running the application
+## Running the Application
 ----
 
 Before you run the application you need to register a client in one of the OAuth2
@@ -177,7 +176,7 @@ spring:
         - RewritePath= /api/reservations/(?<segment>.*),/reservations/$\{segment}
 ~~~
 
-## OAuth2 Security
+## Security
 ----
 
 In this architecture we need to apply OAuth2 security to the client application
@@ -247,7 +246,8 @@ a resource server. And exactly as noted in Spring security docuemtnation, if you
 an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.
 
 In this demo application, the flight service acts as a resource server and
-configured with the below properties:
+configured with the below properties. With this set up the client application
+can communicate securely with the backend flights service.
 
 ~~~ yaml
 spring:
@@ -255,9 +255,98 @@ spring:
     oauth2:
       resourceserver:
         jwt:        
-          jwk-set-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/keys
+          issuer-uri: https://dev-912341.oktapreview.com/oauth2/default
 ~~~          
 
-### 3. Reservations Service - OAuth2 Resource Server
+### 3. Reservations Service - OAuth2 Resource Server and Client
+
+For the front-end client web application to access and communicate with the
+reservations service, the reservations service is configured with same properties
+as the flights service. However, this reservation service needs at some point to
+also communicate with the flights service while booking an itinerary. For that,
+the reservations service, besides being a resource server to the web client application,
+would need to act as a client to the flights service. A custom "SecurityWebFilterChain"
+bean is added to the reservations service to account for configuring it as
+a resource server and a client.
+
+~~~ java
+@Bean
+   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+       http
+               .authorizeExchange()
+               .anyExchange().authenticated()
+               .and().csrf().disable()
+               .oauth2ResourceServer().jwt()
+               // becomes a client again to underneath flights service
+               .and().and().oauth2Login().and()
+               ;
+
+       return http.build();
+   }
+~~~
+
+Furthermore, the service is also configured with OAuth2 client registration
+properties of the previously registered client in Okta with client_credentials
+grant type. It is a client_credentials grant type in this case as it is only
+needed for a communication between two backend service to service.
+
+~~~ yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: {client-id}
+            client-secret: {client-secret}
+            authorization-grant-type: client_credentials
+      resourceserver:
+        jwt:          
+          issuer-uri: https://dev-912341.oktapreview.com/oauth2/default
+~~~
+
+
 
 ### 4. Spring Cloud Gateway - OAuth2 Resource Server
+
+The Spring Cloud Gateway in this architecture acts also as an edge resource
+service to the frontend web application. It is set with the same OAuth2
+resource server configuration properties as the other two backend services.
+However, as its proxying API requests, it needs to pass through the Authentication
+token it receives from the client application as an "Authorization" Bearer header.
+A Gateway global filter bean is defined to pass through the bearer token to
+underneath proxied services.
+
+~~~ java
+public GlobalFilter globalFilter() {
+		return (exchange, chain) -> exchange.getRequest().getHeaders()
+				.entrySet().stream()
+				.filter(entry -> entry.getKey().equals(HttpHeaders.AUTHORIZATION))
+				.map(header -> header.getValue())
+				.map(bearerToken -> {
+					ServerHttpRequest.Builder builder = exchange.getRequest().mutate();
+					builder.header(HttpHeaders.AUTHORIZATION, BEARER + bearerToken);
+					return builder.build();
+				})
+				.map(request -> chain.filter(exchange.mutate().request(request).build()))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Error creating the global filter"))
+				;
+	}
+~~~
+
+## Conclusion
+----
+
+The Spring security team at Pivotal made a great and awesome job to help developers
+to easily secure clients and resource servers with OAuth2 and OpenID Connect support.
+One can easily secure applications using OAuth2 standards with so minimum fuss.
+You can have it all configured with just having the appropriate dependency and
+right OAuth2 configuration properties for the registered client, resource server
+or optionally a provider.
+
+## Resources
+----
+
+* Sample Demo application Code in [Github](https://github.com/Haybu/RA-OAuth2-Gen2)
+* Spring Security [Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-security.html)

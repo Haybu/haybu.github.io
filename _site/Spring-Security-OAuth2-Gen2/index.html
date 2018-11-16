@@ -9,18 +9,18 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="Spring framework provides a comprehensive and extensible support for authentication
-and authorization. Latest enhancements in Spring 5.x have made it simple
+    <meta name="description" content="Spring framework provides a comprehensive and extensible authentication
+and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
-secure a distributed microservices application.
+secure a distributed and reactive-based microservices application.
 
 " />
-    <meta property="og:description" content="Spring framework provides a comprehensive and extensible support for authentication
-and authorization. Latest enhancements in Spring 5.x have made it simple
+    <meta property="og:description" content="Spring framework provides a comprehensive and extensible authentication
+and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
-secure a distributed microservices application.
+secure a distributed and reactive-based microservices application.
 
 " />
     
@@ -68,21 +68,23 @@ secure a distributed microservices application.
  </div>
 
   <div class="entry">
-    <p>Spring framework provides a comprehensive and extensible support for authentication
-and authorization. Latest enhancements in Spring 5.x have made it simple
+    <p>Spring framework provides a comprehensive and extensible authentication
+and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
-secure a distributed microservices application.</p>
+secure a distributed and reactive-based microservices application.</p>
 
 <h2 id="architecture">Architecture</h2>
 <hr />
 
-<p>A simple “Flight Agency” demo application will be used in this
-blog to illustrate using the latest Spring 5.x security features of OAuth2 to
-support microservices authentication and authorization. The architecture of the
-distributed demo application consists of a front-end web application and a couple
+<p>A “Flight Agency” demo application will be used in this
+blog to illustrate applying the latest Springframework 5.x security features of OAuth2 to
+help securing a distributed microservices application. The architecture of the
+demo application consists of a front-end web application and a couple
 of backend microservices. All modules of the application are implemented using
-Spring Boot to take advantage of the auto-configuration and opinionated features.</p>
+Spring Boot to take advantage of the auto-configuration and opinionated features.
+All applications are also implemented with reactive WebFlux support provided by
+Springframework.</p>
 
 <p>As illustrated in the diagram below, the system consists of:</p>
 
@@ -92,34 +94,24 @@ Spring Boot to take advantage of the auto-configuration and opinionated features
 a user to search for a flight from an origin to a destination within
 certain dates, select and book the itinerary flights (called agency-web).</p>
   </li>
-  <li>
-    <p>A back-end service to retrieve available itinerary flights (called flights-service).</p>
-  </li>
-  <li>
-    <p>A back-end service to perform reservations and book the itinerary (called reservations-service)</p>
-  </li>
+  <li>A back-end service to retrieve available itinerary flights (called flights-service).</li>
+  <li>A back-end service to perform reservations and book the itinerary (called reservations-service)</li>
 </ul>
 
 <p>Additionally, the application demo uses common services implemented with Spring
 cloud (Spring Boot based), such as:</p>
 
 <ul>
-  <li>
-    <p>A configuration server to externalize and centralize microservices’ configurations.</p>
-  </li>
-  <li>
-    <p>A registration and discovery service using Spring Cloud Eureka implementation to
-help service to register and discover each other.</p>
-  </li>
-  <li>
-    <p>A Spring Cloud Gateway, as an edge proxy in front of the two backend services
-of flights and reservations.</p>
-  </li>
+  <li>A configuration server to externalize and centralize microservices’ configurations.</li>
+  <li>A registration and discovery service using Spring Cloud Eureka implementation to
+help service to register and discover each other.</li>
+  <li>A Spring Cloud Gateway, as an edge proxy in front of the two backend services
+of flights and reservations.</li>
 </ul>
 
 <p><img src="../images/spring-oauth2-gen2/RA-OAuth2-2.png" width="50%" height="50%" title="architecture" /></p>
 
-<h2 id="running-the-application">Running the application</h2>
+<h2 id="running-the-application">Running the Application</h2>
 <hr />
 
 <p>Before you run the application you need to register a client in one of the OAuth2
@@ -259,7 +251,7 @@ is defined to observe the context path of each target service.</p>
         <span class="pi">-</span> <span class="s">RewritePath= /api/reservations/(?&lt;segment&gt;.*),/reservations/$\{segment}</span>
 </code></pre></div></div>
 
-<h2 id="oauth2-security">OAuth2 Security</h2>
+<h2 id="security">Security</h2>
 <hr />
 
 <p>In this architecture we need to apply OAuth2 security to the client application
@@ -327,19 +319,106 @@ a resource server. And exactly as noted in Spring security docuemtnation, if you
 an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.</p>
 
 <p>In this demo application, the flight service acts as a resource server and
-configured with the below properties:</p>
+configured with the below properties. With this set up the client application
+can communicate securely with the backend flights service.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
   <span class="na">security</span><span class="pi">:</span>
     <span class="na">oauth2</span><span class="pi">:</span>
       <span class="na">resourceserver</span><span class="pi">:</span>
         <span class="na">jwt</span><span class="pi">:</span>        
-          <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/keys</span>
+          <span class="na">issuer-uri</span><span class="pi">:</span> <span class="s">https://dev-912341.oktapreview.com/oauth2/default</span>
 </code></pre></div></div>
 
-<h3 id="3-reservations-service---oauth2-resource-server">3. Reservations Service - OAuth2 Resource Server</h3>
+<h3 id="3-reservations-service---oauth2-resource-server-and-client">3. Reservations Service - OAuth2 Resource Server and Client</h3>
+
+<p>For the front-end client web application to access and communicate with the
+reservations service, the reservations service is configured with same properties
+as the flights service. However, this reservation service needs at some point to
+also communicate with the flights service while booking an itinerary. For that,
+the reservations service, besides being a resource server to the web client application,
+would need to act as a client to the flights service. A custom “SecurityWebFilterChain”
+bean is added to the reservations service to account for configuring it as
+a resource server and a client.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
+   <span class="kd">public</span> <span class="n">SecurityWebFilterChain</span> <span class="nf">securityWebFilterChain</span><span class="o">(</span><span class="n">ServerHttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="o">{</span>
+       <span class="n">http</span>
+               <span class="o">.</span><span class="na">authorizeExchange</span><span class="o">()</span>
+               <span class="o">.</span><span class="na">anyExchange</span><span class="o">().</span><span class="na">authenticated</span><span class="o">()</span>
+               <span class="o">.</span><span class="na">and</span><span class="o">().</span><span class="na">csrf</span><span class="o">().</span><span class="na">disable</span><span class="o">()</span>
+               <span class="o">.</span><span class="na">oauth2ResourceServer</span><span class="o">().</span><span class="na">jwt</span><span class="o">()</span>
+               <span class="c1">// becomes a client again to underneath flights service</span>
+               <span class="o">.</span><span class="na">and</span><span class="o">().</span><span class="na">and</span><span class="o">().</span><span class="na">oauth2Login</span><span class="o">().</span><span class="na">and</span><span class="o">()</span>
+               <span class="o">;</span>
+
+       <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+   <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Furthermore, the service is also configured with OAuth2 client registration
+properties of the previously registered client in Okta with client_credentials
+grant type. It is a client_credentials grant type in this case as it is only
+needed for a communication between two backend service to service.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">security</span><span class="pi">:</span>
+    <span class="na">oauth2</span><span class="pi">:</span>
+      <span class="na">client</span><span class="pi">:</span>
+        <span class="na">registration</span><span class="pi">:</span>
+          <span class="na">okta</span><span class="pi">:</span>
+            <span class="na">client-id</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-id</span><span class="pi">}</span>
+            <span class="na">client-secret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-secret</span><span class="pi">}</span>
+            <span class="na">authorization-grant-type</span><span class="pi">:</span> <span class="s">client_credentials</span>
+      <span class="na">resourceserver</span><span class="pi">:</span>
+        <span class="na">jwt</span><span class="pi">:</span>          
+          <span class="na">issuer-uri</span><span class="pi">:</span> <span class="s">https://dev-912341.oktapreview.com/oauth2/default</span>
+</code></pre></div></div>
 
 <h3 id="4-spring-cloud-gateway---oauth2-resource-server">4. Spring Cloud Gateway - OAuth2 Resource Server</h3>
+
+<p>The Spring Cloud Gateway in this architecture acts also as an edge resource
+service to the frontend web application. It is set with the same OAuth2
+resource server configuration properties as the other two backend services.
+However, as its proxying API requests, it needs to pass through the Authentication
+token it receives from the client application as an “Authorization” Bearer header.
+A Gateway global filter bean is defined to pass through the bearer token to
+underneath proxied services.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">GlobalFilter</span> <span class="nf">globalFilter</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="o">(</span><span class="n">exchange</span><span class="o">,</span> <span class="n">chain</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">exchange</span><span class="o">.</span><span class="na">getRequest</span><span class="o">().</span><span class="na">getHeaders</span><span class="o">()</span>
+				<span class="o">.</span><span class="na">entrySet</span><span class="o">().</span><span class="na">stream</span><span class="o">()</span>
+				<span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">entry</span> <span class="o">-&gt;</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">HttpHeaders</span><span class="o">.</span><span class="na">AUTHORIZATION</span><span class="o">))</span>
+				<span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">header</span> <span class="o">-&gt;</span> <span class="n">header</span><span class="o">.</span><span class="na">getValue</span><span class="o">())</span>
+				<span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">bearerToken</span> <span class="o">-&gt;</span> <span class="o">{</span>
+					<span class="n">ServerHttpRequest</span><span class="o">.</span><span class="na">Builder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">exchange</span><span class="o">.</span><span class="na">getRequest</span><span class="o">().</span><span class="na">mutate</span><span class="o">();</span>
+					<span class="n">builder</span><span class="o">.</span><span class="na">header</span><span class="o">(</span><span class="n">HttpHeaders</span><span class="o">.</span><span class="na">AUTHORIZATION</span><span class="o">,</span> <span class="n">BEARER</span> <span class="o">+</span> <span class="n">bearerToken</span><span class="o">);</span>
+					<span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+				<span class="o">})</span>
+				<span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">request</span> <span class="o">-&gt;</span> <span class="n">chain</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">exchange</span><span class="o">.</span><span class="na">mutate</span><span class="o">().</span><span class="na">request</span><span class="o">(</span><span class="n">request</span><span class="o">).</span><span class="na">build</span><span class="o">()))</span>
+				<span class="o">.</span><span class="na">findFirst</span><span class="o">()</span>
+				<span class="o">.</span><span class="na">orElseThrow</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"Error creating the global filter"</span><span class="o">))</span>
+				<span class="o">;</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<hr />
+
+<p>The Spring security team at Pivotal made a great and awesome job to help developers
+to easily secure clients and resource servers with OAuth2 and OpenID Connect support.
+One can easily secure applications using OAuth2 standards with so minimum fuss.
+You can have it all configured with just having the appropriate dependency and
+right OAuth2 configuration properties for the registered client, resource server
+or optionally a provider.</p>
+
+<h2 id="resources">Resources</h2>
+<hr />
+
+<ul>
+  <li>Sample Demo application Code in <a href="https://github.com/Haybu/RA-OAuth2-Gen2">Github</a></li>
+  <li>Spring Security <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-security.html">Documentation</a></li>
+</ul>
 
   </div>
 
