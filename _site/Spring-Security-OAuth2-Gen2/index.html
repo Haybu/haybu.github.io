@@ -297,11 +297,11 @@ oidc-provider.issuer-uri” prefix).</p>
             <span class="na">authorization-grant-type</span><span class="pi">:</span> <span class="s">authorization_code</span>            
         <span class="na">provider</span><span class="pi">:</span>
           <span class="na">okta</span><span class="pi">:</span>
-            <span class="na">authorization-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize</span>
-            <span class="na">token-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/token</span>
-            <span class="na">user-info-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo</span>
+            <span class="na">authorization-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/authorize</span>
+            <span class="na">token-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/token</span>
+            <span class="na">user-info-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/userinfo</span>
             <span class="na">user-name-attribute</span><span class="pi">:</span> <span class="s">sub</span>
-            <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys</span>
+            <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/keys</span>
 </code></pre></div></div>
 
 <p>The configuration listed above shows many properties for clarity. However, its worth
@@ -316,11 +316,26 @@ as ‘okta’ same as the provider name.</p>
       <span class="na">client</span><span class="pi">:</span>
         <span class="na">registration</span><span class="pi">:</span>
           <span class="na">okta</span><span class="pi">:</span>     <span class="c1"># &lt;-- notice the name here</span>
-            <span class="na">client-id</span><span class="pi">:</span> <span class="s">0oag1zrlf2fRbRTLk0h7</span>
-            <span class="na">client-secret</span><span class="pi">:</span> <span class="s">8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz</span>
+            <span class="na">client-id</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-id</span><span class="pi">}</span>
+            <span class="na">client-secret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-secret</span><span class="pi">}</span>
 </code></pre></div></div>
 
 <h3 id="2-flights-service---oauth2-resource-server">2. Flights Service - OAuth2 Resource Server</h3>
+
+<p>It gets more simpler with the new OAuth2 support in Spring 5.x to configure
+a resource server. And exactly as noted in Spring security docuemtnation, if you have “spring-security-oauth2-resource-server” on your classpath, Spring Boot can set up
+an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.</p>
+
+<p>In this demo application, the flight service acts as a resource server and
+configured with the below properties:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">security</span><span class="pi">:</span>
+    <span class="na">oauth2</span><span class="pi">:</span>
+      <span class="na">resourceserver</span><span class="pi">:</span>
+        <span class="na">jwt</span><span class="pi">:</span>        
+          <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">https://[okta-account].oktapreview.com/oauth2/default/v1/keys</span>
+</code></pre></div></div>
 
 <h3 id="3-reservations-service---oauth2-resource-server">3. Reservations Service - OAuth2 Resource Server</h3>
 

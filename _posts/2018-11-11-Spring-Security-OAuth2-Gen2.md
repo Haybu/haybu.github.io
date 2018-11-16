@@ -216,11 +216,11 @@ spring:
             authorization-grant-type: authorization_code            
         provider:
           okta:
-            authorization-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize
-            token-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/token
-            user-info-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo
+            authorization-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/authorize
+            token-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/token
+            user-info-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/userinfo
             user-name-attribute: sub
-            jwk-set-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys
+            jwk-set-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/keys
 ~~~
 
 The configuration listed above shows many properties for clarity. However, its worth
@@ -236,11 +236,27 @@ spring:
       client:
         registration:
           okta:     # <-- notice the name here
-            client-id: 0oag1zrlf2fRbRTLk0h7
-            client-secret: 8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz
+            client-id: {client-id}
+            client-secret: {client-secret}
 ~~~
 
 ### 2. Flights Service - OAuth2 Resource Server
+
+It gets more simpler with the new OAuth2 support in Spring 5.x to configure
+a resource server. And exactly as noted in Spring security docuemtnation, if you have "spring-security-oauth2-resource-server" on your classpath, Spring Boot can set up
+an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.
+
+In this demo application, the flight service acts as a resource server and
+configured with the below properties:
+
+~~~ yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:        
+          jwk-set-uri: https://[okta-account].oktapreview.com/oauth2/default/v1/keys
+~~~          
 
 ### 3. Reservations Service - OAuth2 Resource Server
 

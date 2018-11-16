@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-16T11:44:40-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible support for authentication
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-16T12:12:14-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible support for authentication
 and authorization. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
@@ -227,11 +227,11 @@ oidc-provider.issuer-uri” prefix).&lt;/p&gt;
             &lt;span class=&quot;na&quot;&gt;authorization-grant-type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;authorization_code&lt;/span&gt;            
         &lt;span class=&quot;na&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
           &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/token&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/authorize&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/token&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/userinfo&lt;/span&gt;
             &lt;span class=&quot;na&quot;&gt;user-name-attribute&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sub&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/keys&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The configuration listed above shows many properties for clarity. However, its worth
@@ -246,11 +246,26 @@ as ‘okta’ same as the provider name.&lt;/p&gt;
       &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
           &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# &amp;lt;-- notice the name here&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0oag1zrlf2fRbRTLk0h7&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;2-flights-service---oauth2-resource-server&quot;&gt;2. Flights Service - OAuth2 Resource Server&lt;/h3&gt;
+
+&lt;p&gt;It gets more simpler with the new OAuth2 support in Spring 5.x to configure
+a resource server. And exactly as noted in Spring security docuemtnation, if you have “spring-security-oauth2-resource-server” on your classpath, Spring Boot can set up
+an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.&lt;/p&gt;
+
+&lt;p&gt;In this demo application, the flight service acts as a resource server and
+configured with the below properties:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;resourceserver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;jwt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;        
+          &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/keys&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;3-reservations-service---oauth2-resource-server&quot;&gt;3. Reservations Service - OAuth2 Resource Server&lt;/h3&gt;
 
