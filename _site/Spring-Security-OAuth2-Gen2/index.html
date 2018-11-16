@@ -79,15 +79,12 @@ secure a distributed microservices application.</p>
 
 <p>A simple “Flight Agency” demo application will be used in this
 blog to illustrate using the latest Spring 5.x security features of OAuth2 to
-support microservices authentication and authorization.</p>
+support microservices authentication and authorization. The architecture of the
+distributed demo application consists of a front-end web application and a couple
+of backend microservices. All modules of the application are implemented using
+Spring Boot to take advantage of the auto-configuration and opinionated features.</p>
 
-<p>The architecture of the distributed demo application consists of a
-front-end web application and a couple of backend microservices. All modules of
-the application are implemented using Spring Boot to take advantage of the
-auto-configuration and opinionated features. As illustrated in the diagram below,
-The system consists of</p>
-
-<p><img src="../images/spring-oauth2-gen2/RA-OAuth2-2.png" width="50%" height="50%" title="architecture" /></p>
+<p>As illustrated in the diagram below, the system consists of:</p>
 
 <ul>
   <li>
@@ -119,6 +116,124 @@ help service to register and discover each other.</p>
 of flights and reservations.</p>
   </li>
 </ul>
+
+<p><img src="../images/spring-oauth2-gen2/RA-OAuth2-2.png" width="50%" height="50%" title="architecture" /></p>
+
+<h2 id="running-the-application">Running the application</h2>
+<hr />
+
+<p>Before you run the application you need to register a client in one of the OAuth2
+/ OpenId Connect providers. Okta can be chosen as a provider for this demo. You can
+create a free developer account if you do not have one already by going to okta
+developer’s [portal] (https://developer.okta.com/). Once logged into okta, register
+a new application with authorization_code grant, identify a name and specify the following
+parameters in the registration form:</p>
+
+<ul>
+  <li>Login redirect URIs: http://localhost:8080/login/oauth2/code/okta</li>
+  <li>Initiate Login URI: http://localhost:8080</li>
+</ul>
+
+<p>Note down the client ID and client secret provided after you complete the registration.</p>
+
+<p>Register another application but this time with client_credentials grant, specify
+a name in the registration form and note the provided client ID and client secret.</p>
+
+<ul>
+  <li>clone the application from github</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/Haybu/RA-OAuth2-Gen2.git
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Change your working directory to go to “RA-OAuth2-Gen2/config-files” folder, edit
+agency-web.yml file and enter the client_id and client secret of the application
+registered in okta with authorization_client grant type. Also enter your okta’s
+account URL on “spring.security.oauth2.provider.okta.*” properties to replace the
+host name portions as appropriate.</p>
+  </li>
+  <li>
+    <p>On the same folder, edit reservations-service.yml file and enter the client ID
+and client secret of the application registered in okta with client_credentials
+grant type. Also make sure to supply appropriate URL per your Okta’s account on
+the security provider’s parameters.</p>
+  </li>
+  <li>
+    <p>change your working directory back to “RA-OAuth2-Gen2” and run the startup.sh
+script file to compile, package and run all application’s modules</p>
+  </li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./startup.sh
+</code></pre></div></div>
+
+<h2 id="application-flow">Application Flow</h2>
+<hr />
+
+<p>After bringing all modules up, access the web client application by going to
+http://localhost:8080. You will be directed to your OAuth2 provider’s (in this
+case Okta) to authenticate and authorize to the application. Once successfully
+logged in, search for a trip intinerary by entering: origin as <strong>AUS</strong>, destination
+as <strong>IAH</strong>, departure date as <strong>5/5/2018</strong> and return date as <strong>5/22/2018</strong>.</p>
+
+<p>The application will display a list of flights, select your outgoing flight. On
+the next page pick your returning flight, then click on “book” on the following
+page and you will be presented with two confirmation numbers for each flight.</p>
+
+<p>As illustrated in the sequence diagram below, the client application
+utilizes a backend “flights service” to provides all available flights per
+a search request. Additionally, a “reservations service” is also helping the
+client application to perform booking on the selected flights. The client application
+and both backend services are implemented using Spring Boot. They all leverage
+Spring Cloud configuration server to externalize their configurations, and Spring
+Cloud Eureka for services registrations and discoveries. The front-end client
+application talks to the backend services via a Spring Cloud Gateway.</p>
+
+<p><img src="../images/spring-oauth2-gen2/RA-OAuth2-seq-diagram-1.png" width="460" height="400" title="architecture" /></p>
+
+<h2 id="spring-configuration-server">Spring Configuration Server</h2>
+<hr />
+
+<p>While you can choose from many supported backend to host application configurations,
+in this demo a local native file system storage is used to keep all application’s
+“yml” property files. The configuration files repository, illustrated below, contains
+all “yml” files each named after its application name.</p>
+
+<p><img src="../images/spring-oauth2-gen2/config-files.png" width="200" height="120" title="architecture" /></p>
+
+<p>Applications bootstrap their configurations by pointing to the configuration
+server URL as identified in each application’s ./resources/bootstrap.yml file.</p>
+
+<h2 id="services-registration-and-discovery">Services Registration and discovery</h2>
+<hr />
+
+<p>Client application, two backing API services and the gateway application<br />
+register themselves automatically with a Spring Cloud Eureka server when they
+spin up. When the client application wants to interact with one of the backend
+services it uses a “WebClient” bean that is set with a “LoadBalancerExchangeFilterFunction”
+filter to help with balancing out of the discovered target services’ instances.</p>
+
+<p>For example, a client application would define a load-balanced “WebClient” bean
+as listed below and use that to interact with underneath services discovered
+from a Eureka service. Further configuration to the “WebCliet” bean will be
+defined further below to help authenticating and access the registered backend
+services.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
+ <span class="n">WebClient</span> <span class="nf">webClient</span><span class="o">(</span><span class="n">LoadBalancerExchangeFilterFunction</span> <span class="n">eff</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ServerOAuth2AuthorizedClientExchangeFilterFunction</span> <span class="n">oauth2</span> <span class="o">=</span>
+		      <span class="k">new</span> <span class="nf">ServerOAuth2AuthorizedClientExchangeFilterFunction</span><span class="o">(</span><span class="n">repo1</span><span class="o">,</span> <span class="n">repo2</span><span class="o">);</span>
+
+		<span class="k">return</span> <span class="n">WebClient</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+				<span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">eff</span><span class="o">)</span>
+				<span class="o">.</span><span class="na">build</span><span class="o">();</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="spring-cloud-gateway">Spring Cloud Gateway</h2>
+<hr />
 
 <h2 id="web-application---oauth2-client">Web Application - OAuth2 Client</h2>
 <hr />
