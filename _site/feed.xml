@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-15T18:57:34-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible support for authentication
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-16T11:44:40-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible support for authentication
 and authorization. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate how to use OAuth2 second-generation support in Spring framework to
@@ -60,8 +60,8 @@ a new application with authorization_code grant, identify a name and specify the
 parameters in the registration form:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Login redirect URIs: http://localhost:8080/login/oauth2/code/okta&lt;/li&gt;
-  &lt;li&gt;Initiate Login URI: http://localhost:8080&lt;/li&gt;
+  &lt;li&gt;Login redirect URIs: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/login/oauth2/code/okta&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Initiate Login URI: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Note down the client ID and client secret provided after you complete the registration.&lt;/p&gt;
@@ -165,8 +165,96 @@ services.&lt;/p&gt;
 &lt;h2 id=&quot;spring-cloud-gateway&quot;&gt;Spring Cloud Gateway&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;web-application---oauth2-client&quot;&gt;Web Application - OAuth2 Client&lt;/h2&gt;
-&lt;hr /&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">Spring framework provides a comprehensive and extensible support for authentication and authorization. Latest enhancements in Spring 5.x have made it simple to apply security standards such as OAuth2 to secure applications. In this blog I will demonstrate how to use OAuth2 second-generation support in Spring framework to secure a distributed microservices application.</summary></entry><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
+&lt;p&gt;As mentioned above, the web client application communicates with the two backend
+micorservices via a Spring Cloud Gateway. The Gateway is configured also in its
+“yml” configuration file in the configuration server with all the routes qualified
+by a target path to each proxied service. And As shown below, a “RewritePath” filter
+is defined to observe the context path of each target service.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;gateway&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flights_service_route&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;lb://flights-service&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Path=/api/flights/**&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;filters&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;RewritePath= /api/flights/(?&amp;lt;segment&amp;gt;.*),/flights/$\{segment}&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;reservations_service_route&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;lb://reservations-service&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;predicates&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Path=/api/reservations/**&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;filters&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;RewritePath= /api/reservations/(?&amp;lt;segment&amp;gt;.*),/reservations/$\{segment}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;oauth2-security&quot;&gt;OAuth2 Security&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;In this architecture we need to apply OAuth2 security to the client application
+and the two backend microservices. New security enhancement in spring 5.x paves
+an easy way to secure applications using OAuth2 standards.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-web-application---oauth2-client&quot;&gt;1. Web Application - OAuth2 Client&lt;/h3&gt;
+
+&lt;p&gt;You can take advantage
+of auto-configuring an OAuth2/Open ID connect clients if you have
+“spring-security-oauth2-client” dependency on your classpath. It is even gets
+simpler to register as many clients as you desire using properties with
+“spring.security.oauth2.client” prefix, and define your provider’s properties with
+“spring.security.oauth2.provider” prefix.&lt;/p&gt;
+
+&lt;p&gt;For instance, in this demo, after the web client application is registered with
+one of the OAuth2 / OpenID Connect providers (like Okta), you can configure the
+web application with properties that register a client with the a client-id and
+client-secret. Also you can define the selected client’s provider with information
+such as the authorization URI, token URI, user-info URI and JWK set URI. With those
+providers who support OpenID Connect discovery, the configuration could be further
+simplified by specifying the issuer URI (with “spring.security.oauth2.client.provider.
+oidc-provider.issuer-uri” prefix).&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-authentication-method&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;basic&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid profile email&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;authorization-grant-type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;authorization_code&lt;/span&gt;            
+        &lt;span class=&quot;na&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/token&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-name-attribute&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sub&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The configuration listed above shows many properties for clarity. However, its worth
+to note, the framework provides a set of default configured common OAuth2 and
+OpenID providers, such as Okta, Google, Facebook, and Github. So the configuration
+for Okta above could be simplified as below. Notice, the registered client named
+as ‘okta’ same as the provider name.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# &amp;lt;-- notice the name here&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;0oag1zrlf2fRbRTLk0h7&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-flights-service---oauth2-resource-server&quot;&gt;2. Flights Service - OAuth2 Resource Server&lt;/h3&gt;
+
+&lt;h3 id=&quot;3-reservations-service---oauth2-resource-server&quot;&gt;3. Reservations Service - OAuth2 Resource Server&lt;/h3&gt;
+
+&lt;h3 id=&quot;4-spring-cloud-gateway---oauth2-resource-server&quot;&gt;4. Spring Cloud Gateway - OAuth2 Resource Server&lt;/h3&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">Spring framework provides a comprehensive and extensible support for authentication and authorization. Latest enhancements in Spring 5.x have made it simple to apply security standards such as OAuth2 to secure applications. In this blog I will demonstrate how to use OAuth2 second-generation support in Spring framework to secure a distributed microservices application.</summary></entry><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both front-end application
 and backend services are behind an edge proxy that assumes the responsibility

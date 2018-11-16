@@ -53,8 +53,8 @@ developer's [portal] (https://developer.okta.com/). Once logged into okta, regis
 a new application with authorization_code grant, identify a name and specify the following
 parameters in the registration form:
 
-* Login redirect URIs: http://localhost:8080/login/oauth2/code/okta
-* Initiate Login URI: http://localhost:8080
+* Login redirect URIs: `http://localhost:8080/login/oauth2/code/okta`
+* Initiate Login URI: `http://localhost:8080`
 
 Note down the client ID and client secret provided after you complete the registration.
 
@@ -152,5 +152,96 @@ services.
 ## Spring Cloud Gateway
 ----
 
-## Web Application - OAuth2 Client
+As mentioned above, the web client application communicates with the two backend
+micorservices via a Spring Cloud Gateway. The Gateway is configured also in its
+"yml" configuration file in the configuration server with all the routes qualified
+by a target path to each proxied service. And As shown below, a "RewritePath" filter
+is defined to observe the context path of each target service.
+
+~~~ yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: flights_service_route
+        uri: lb://flights-service
+        predicates:
+        - Path=/api/flights/**
+        filters:
+        - RewritePath= /api/flights/(?<segment>.*),/flights/$\{segment}
+      - id: reservations_service_route
+        uri: lb://reservations-service
+        predicates:
+        - Path=/api/reservations/**
+        filters:
+        - RewritePath= /api/reservations/(?<segment>.*),/reservations/$\{segment}
+~~~
+
+## OAuth2 Security
 ----
+
+In this architecture we need to apply OAuth2 security to the client application
+and the two backend microservices. New security enhancement in spring 5.x paves
+an easy way to secure applications using OAuth2 standards.
+
+### 1. Web Application - OAuth2 Client
+
+You can take advantage
+of auto-configuring an OAuth2/Open ID connect clients if you have
+"spring-security-oauth2-client" dependency on your classpath. It is even gets
+simpler to register as many clients as you desire using properties with
+"spring.security.oauth2.client" prefix, and define your provider's properties with
+"spring.security.oauth2.provider" prefix.
+
+For instance, in this demo, after the web client application is registered with
+one of the OAuth2 / OpenID Connect providers (like Okta), you can configure the
+web application with properties that register a client with the a client-id and
+client-secret. Also you can define the selected client's provider with information
+such as the authorization URI, token URI, user-info URI and JWK set URI. With those
+providers who support OpenID Connect discovery, the configuration could be further
+simplified by specifying the issuer URI (with "spring.security.oauth2.client.provider.
+oidc-provider.issuer-uri" prefix).
+
+~~~ yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: {client-id}
+            client-secret: {client-secret}
+            client-authentication-method: basic
+            scope: openid profile email
+            authorization-grant-type: authorization_code            
+        provider:
+          okta:
+            authorization-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize
+            token-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/token
+            user-info-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys
+~~~
+
+The configuration listed above shows many properties for clarity. However, its worth
+to note, the framework provides a set of default configured common OAuth2 and
+OpenID providers, such as Okta, Google, Facebook, and Github. So the configuration
+for Okta above could be simplified as below. Notice, the registered client named
+as 'okta' same as the provider name.
+
+~~~ yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:     # <-- notice the name here
+            client-id: 0oag1zrlf2fRbRTLk0h7
+            client-secret: 8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz
+~~~
+
+### 2. Flights Service - OAuth2 Resource Server
+
+### 3. Reservations Service - OAuth2 Resource Server
+
+### 4. Spring Cloud Gateway - OAuth2 Resource Server

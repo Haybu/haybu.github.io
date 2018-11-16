@@ -130,8 +130,8 @@ a new application with authorization_code grant, identify a name and specify the
 parameters in the registration form:</p>
 
 <ul>
-  <li>Login redirect URIs: http://localhost:8080/login/oauth2/code/okta</li>
-  <li>Initiate Login URI: http://localhost:8080</li>
+  <li>Login redirect URIs: <code class="highlighter-rouge">http://localhost:8080/login/oauth2/code/okta</code></li>
+  <li>Initiate Login URI: <code class="highlighter-rouge">http://localhost:8080</code></li>
 </ul>
 
 <p>Note down the client ID and client secret provided after you complete the registration.</p>
@@ -235,8 +235,96 @@ services.</p>
 <h2 id="spring-cloud-gateway">Spring Cloud Gateway</h2>
 <hr />
 
-<h2 id="web-application---oauth2-client">Web Application - OAuth2 Client</h2>
+<p>As mentioned above, the web client application communicates with the two backend
+micorservices via a Spring Cloud Gateway. The Gateway is configured also in its
+“yml” configuration file in the configuration server with all the routes qualified
+by a target path to each proxied service. And As shown below, a “RewritePath” filter
+is defined to observe the context path of each target service.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">cloud</span><span class="pi">:</span>
+    <span class="na">gateway</span><span class="pi">:</span>
+      <span class="na">routes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">flights_service_route</span>
+        <span class="na">uri</span><span class="pi">:</span> <span class="s">lb://flights-service</span>
+        <span class="na">predicates</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">Path=/api/flights/**</span>
+        <span class="na">filters</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">RewritePath= /api/flights/(?&lt;segment&gt;.*),/flights/$\{segment}</span>
+      <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">reservations_service_route</span>
+        <span class="na">uri</span><span class="pi">:</span> <span class="s">lb://reservations-service</span>
+        <span class="na">predicates</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">Path=/api/reservations/**</span>
+        <span class="na">filters</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">RewritePath= /api/reservations/(?&lt;segment&gt;.*),/reservations/$\{segment}</span>
+</code></pre></div></div>
+
+<h2 id="oauth2-security">OAuth2 Security</h2>
 <hr />
+
+<p>In this architecture we need to apply OAuth2 security to the client application
+and the two backend microservices. New security enhancement in spring 5.x paves
+an easy way to secure applications using OAuth2 standards.</p>
+
+<h3 id="1-web-application---oauth2-client">1. Web Application - OAuth2 Client</h3>
+
+<p>You can take advantage
+of auto-configuring an OAuth2/Open ID connect clients if you have
+“spring-security-oauth2-client” dependency on your classpath. It is even gets
+simpler to register as many clients as you desire using properties with
+“spring.security.oauth2.client” prefix, and define your provider’s properties with
+“spring.security.oauth2.provider” prefix.</p>
+
+<p>For instance, in this demo, after the web client application is registered with
+one of the OAuth2 / OpenID Connect providers (like Okta), you can configure the
+web application with properties that register a client with the a client-id and
+client-secret. Also you can define the selected client’s provider with information
+such as the authorization URI, token URI, user-info URI and JWK set URI. With those
+providers who support OpenID Connect discovery, the configuration could be further
+simplified by specifying the issuer URI (with “spring.security.oauth2.client.provider.
+oidc-provider.issuer-uri” prefix).</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">security</span><span class="pi">:</span>
+    <span class="na">oauth2</span><span class="pi">:</span>
+      <span class="na">client</span><span class="pi">:</span>
+        <span class="na">registration</span><span class="pi">:</span>
+          <span class="na">okta</span><span class="pi">:</span>
+            <span class="na">client-id</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-id</span><span class="pi">}</span>
+            <span class="na">client-secret</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">client-secret</span><span class="pi">}</span>
+            <span class="na">client-authentication-method</span><span class="pi">:</span> <span class="s">basic</span>
+            <span class="na">scope</span><span class="pi">:</span> <span class="s">openid profile email</span>
+            <span class="na">authorization-grant-type</span><span class="pi">:</span> <span class="s">authorization_code</span>            
+        <span class="na">provider</span><span class="pi">:</span>
+          <span class="na">okta</span><span class="pi">:</span>
+            <span class="na">authorization-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/authorize</span>
+            <span class="na">token-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/token</span>
+            <span class="na">user-info-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/userinfo</span>
+            <span class="na">user-name-attribute</span><span class="pi">:</span> <span class="s">sub</span>
+            <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">https://[your-dev-account].oktapreview.com/oauth2/default/v1/keys</span>
+</code></pre></div></div>
+
+<p>The configuration listed above shows many properties for clarity. However, its worth
+to note, the framework provides a set of default configured common OAuth2 and
+OpenID providers, such as Okta, Google, Facebook, and Github. So the configuration
+for Okta above could be simplified as below. Notice, the registered client named
+as ‘okta’ same as the provider name.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">security</span><span class="pi">:</span>
+    <span class="na">oauth2</span><span class="pi">:</span>
+      <span class="na">client</span><span class="pi">:</span>
+        <span class="na">registration</span><span class="pi">:</span>
+          <span class="na">okta</span><span class="pi">:</span>     <span class="c1"># &lt;-- notice the name here</span>
+            <span class="na">client-id</span><span class="pi">:</span> <span class="s">0oag1zrlf2fRbRTLk0h7</span>
+            <span class="na">client-secret</span><span class="pi">:</span> <span class="s">8najBM6XwbXXSa_5MG4h87T8AnBnru3mkJi05Tzz</span>
+</code></pre></div></div>
+
+<h3 id="2-flights-service---oauth2-resource-server">2. Flights Service - OAuth2 Resource Server</h3>
+
+<h3 id="3-reservations-service---oauth2-resource-server">3. Reservations Service - OAuth2 Resource Server</h3>
+
+<h3 id="4-spring-cloud-gateway---oauth2-resource-server">4. Spring Cloud Gateway - OAuth2 Resource Server</h3>
 
   </div>
 
