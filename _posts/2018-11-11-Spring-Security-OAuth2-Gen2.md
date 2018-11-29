@@ -255,7 +255,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:        
-          issuer-uri: https://dev-912341.oktapreview.com/oauth2/default
+          issuer-uri: https://[okta-account].oktapreview.com/oauth2/default
 ~~~          
 
 ### 3. Reservations Service - OAuth2 Resource Server and Client
@@ -302,7 +302,7 @@ spring:
             authorization-grant-type: client_credentials
       resourceserver:
         jwt:          
-          issuer-uri: https://dev-912341.oktapreview.com/oauth2/default
+          issuer-uri: https://[okta-account].oktapreview.com/oauth2/default
 ~~~
 
 
