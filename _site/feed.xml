@@ -1,65 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-16T14:35:13-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible authentication
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-29T16:18:54-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible authentication
 and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
-demonstrate how to use OAuth2 second-generation support in Spring framework to
-secure a distributed and reactive-based microservices application.&lt;/p&gt;
+demonstrate leveraging second-generation of OAuth2 support in Springframework
+security in a distributed and reactive-based microservices application.&lt;/p&gt;
 
 &lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;A “Flight Agency” demo application will be used in this
-blog to illustrate applying the latest Springframework 5.x security features of OAuth2 to
-help securing a distributed microservices application. The architecture of the
-demo application consists of a front-end web application and a couple
+&lt;p&gt;A Spring-based simulation of a flight reservation web application is created for this
+blog to illustrate applying the latest Springframework 5.x security features to
+secure a distributed microservices application. The architecture of the
+demonstrating application consists of a front-end web application and a couple
 of backend microservices. All modules of the application are implemented using
-Spring Boot to take advantage of the auto-configuration and opinionated features.
-All applications are also implemented with reactive WebFlux support provided by
+Spring Boot to take advantage of the auto-configuration features to setup the application.
+All Services in the application are implemented with reactive WebFlux support provided by
 Springframework.&lt;/p&gt;
 
 &lt;p&gt;As illustrated in the diagram below, the system consists of:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;Front-end Web application implemented using Tymeleaf. The application allows
+    &lt;p&gt;Front-end Web application implemented using Thymeleaf. The application allows
 a user to search for a flight from an origin to a destination within
-certain dates, select and book the itinerary flights (called agency-web).&lt;/p&gt;
+certain dates, select and book the itinerary. The module is named as agency-web.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;A back-end service to retrieve available itinerary flights (called flights-service).&lt;/li&gt;
-  &lt;li&gt;A back-end service to perform reservations and book the itinerary (called reservations-service)&lt;/li&gt;
+  &lt;li&gt;A back-end service to retrieve available itinerary flights, named as flights-service.&lt;/li&gt;
+  &lt;li&gt;A back-end service to perform reservations and book the itinerary, named as reservations-service.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Additionally, the application demo uses common services implemented with Spring
-cloud (Spring Boot based), such as:&lt;/p&gt;
+&lt;p&gt;Additionally, the application uses common Spring Cloud services such as:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A configuration server to externalize and centralize microservices’ configurations.&lt;/li&gt;
   &lt;li&gt;A registration and discovery service using Spring Cloud Eureka implementation to
-help service to register and discover each other.&lt;/li&gt;
-  &lt;li&gt;A Spring Cloud Gateway, as an edge proxy in front of the two backend services
-of flights and reservations.&lt;/li&gt;
+help services to register and discover each other.&lt;/li&gt;
+  &lt;li&gt;A Spring Cloud Gateway  in front of the flights and reservations backend services.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen2/RA-OAuth2-2.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen2/RA-OAuth2-3.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;running-the-application&quot;&gt;Running the Application&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;Before you run the application you need to register a client in one of the OAuth2
-/ OpenId Connect providers. Okta can be chosen as a provider for this demo. You can
-create a free developer account if you do not have one already by going to okta
-developer’s [portal] (https://developer.okta.com/). Once logged into okta, register
-a new application with authorization_code grant, identify a name and specify the following
-parameters in the registration form:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Login redirect URIs: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080/login/oauth2/code/okta&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Initiate Login URI: &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Note down the client ID and client secret provided after you complete the registration.&lt;/p&gt;
-
-&lt;p&gt;Register another application but this time with client_credentials grant, specify
-a name in the registration form and note the provided client ID and client secret.&lt;/p&gt;
+&lt;p&gt;Follow the steps below to run the application:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;clone the application from github&lt;/li&gt;
@@ -69,23 +51,21 @@ a name in the registration form and note the provided client ID and client secre
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Change your working directory to go to “RA-OAuth2-Gen2/config-files” folder, edit
-agency-web.yml file and enter the client_id and client secret of the application
-registered in okta with authorization_client grant type. Also enter your okta’s
-account URL on “spring.security.oauth2.provider.okta.*” properties to replace the
-host name portions as appropriate.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;On the same folder, edit reservations-service.yml file and enter the client ID
-and client secret of the application registered in okta with client_credentials
-grant type. Also make sure to supply appropriate URL per your Okta’s account on
-the security provider’s parameters.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;change your working directory back to “RA-OAuth2-Gen2” and run the startup.sh
-script file to compile, package and run all application’s modules&lt;/p&gt;
-  &lt;/li&gt;
+  &lt;li&gt;Build the application from the project home directory&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mvn clean &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Launch the UAA authorization server.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./uaa-server/gradlew &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; ./uaa-server/build.gradle uaa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Bring up all services by running the shell script startup.sh&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./startup.sh
@@ -94,74 +74,58 @@ script file to compile, package and run all application’s modules&lt;/p&gt;
 &lt;h2 id=&quot;application-flow&quot;&gt;Application Flow&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;After bringing all modules up, access the web client application by going to
-http://localhost:8080. You will be directed to your OAuth2 provider’s (in this
-case Okta) to authenticate and authorize to the application. Once successfully
-logged in, search for a trip intinerary by entering: origin as &lt;strong&gt;AUS&lt;/strong&gt;, destination
+&lt;p&gt;After bringing all modules up, access the web application at
+http://localhost:8080. You will be redirected to the OAuth2 authorization server
+(UAA) to authenticate and authorize to the application. Once successfully
+logged in, search for a trip itinerary by entering: origin as &lt;strong&gt;AUS&lt;/strong&gt;, destination
 as &lt;strong&gt;IAH&lt;/strong&gt;, departure date as &lt;strong&gt;5/5/2018&lt;/strong&gt; and return date as &lt;strong&gt;5/22/2018&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;The application will display a list of flights, select your outgoing flight. On
-the next page pick your returning flight, then click on “book” on the following
-page and you will be presented with two confirmation numbers for each flight.&lt;/p&gt;
+&lt;p&gt;The application will display a list of flights, select an outbound flight, an
+inbound flight, review select seletected flights and click on “book” button. The
+application will display a reservation confirmation number for each flight.&lt;/p&gt;
 
 &lt;p&gt;As illustrated in the sequence diagram below, the client application
-utilizes a backend “flights service” to provides all available flights per
-a search request. Additionally, a “reservations service” is also helping the
-client application to perform booking on the selected flights. The client application
+utilizes a backend “flights service” to search for available flights per a user
+search request. Additionally, a “reservations” backend service is also helping a
+client to book the selected flights. The client application
 and both backend services are implemented using Spring Boot. They all leverage
-Spring Cloud configuration server to externalize their configurations, and Spring
-Cloud Eureka for services registrations and discoveries. The front-end client
+Spring Cloud Eureka for services registrations and discoveries. The front-end client
 application talks to the backend services via a Spring Cloud Gateway.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen2/RA-OAuth2-seq-diagram-1.png&quot; width=&quot;460&quot; height=&quot;400&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;spring-configuration-server&quot;&gt;Spring Configuration Server&lt;/h2&gt;
-&lt;hr /&gt;
-
-&lt;p&gt;While you can choose from many supported backend to host application configurations,
-in this demo a local native file system storage is used to keep all application’s
-“yml” property files. The configuration files repository, illustrated below, contains
-all “yml” files each named after its application name.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/spring-oauth2-gen2/config-files.png&quot; width=&quot;200&quot; height=&quot;120&quot; title=&quot;architecture&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Applications bootstrap their configurations by pointing to the configuration
-server URL as identified in each application’s ./resources/bootstrap.yml file.&lt;/p&gt;
-
 &lt;h2 id=&quot;services-registration-and-discovery&quot;&gt;Services Registration and discovery&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;Client application, two backing API services and the gateway application&lt;br /&gt;
-register themselves automatically with a Spring Cloud Eureka server when they
-spin up. When the client application wants to interact with one of the backend
-services it uses a “WebClient” bean that is set with a “LoadBalancerExchangeFilterFunction”
-filter to help with balancing out of the discovered target services’ instances.&lt;/p&gt;
+&lt;p&gt;Client application, the two backend API services and the gateway application&lt;br /&gt;
+all register themselves automatically with a Spring Cloud Eureka server when they
+spin up. The client application uses a “WebClient” bean to interact with any of the backend
+services. The “WebClient” beans are configured with a “LoadBalancerExchangeFilterFunction”
+filter to help with balancing out between the discovered target services’ instances.&lt;/p&gt;
 
-&lt;p&gt;For example, a client application would define a load-balanced “WebClient” bean
-as listed below and use that to interact with underneath services discovered
-from a Eureka service. Further configuration to the “WebCliet” bean will be
-defined further below to help authenticating and access the registered backend
-services.&lt;/p&gt;
+&lt;p&gt;For example, a client application defines a load-balanced “WebClient” bean
+as listed below and uses that to interact with underneath discovered gateway
+from a Eureka service.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
- &lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LoadBalancerExchangeFilterFunction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eff&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LoadBalancerExchangeFilterFunction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eff&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;ReactiveClientRegistrationRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repo1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;ServerOAuth2AuthorizedClientRepository&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repo2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 		&lt;span class=&quot;n&quot;&gt;ServerOAuth2AuthorizedClientExchangeFilterFunction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
-		      &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServerOAuth2AuthorizedClientExchangeFilterFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;repo1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repo2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eff&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
- &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServerOAuth2AuthorizedClientExchangeFilterFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;repo1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repo2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eff&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;spring-cloud-gateway&quot;&gt;Spring Cloud Gateway&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;As mentioned above, the web client application communicates with the two backend
-micorservices via a Spring Cloud Gateway. The Gateway is configured also in its
-“yml” configuration file in the configuration server with all the routes qualified
-by a target path to each proxied service. And As shown below, a “RewritePath” filter
-is defined to observe the context path of each target service.&lt;/p&gt;
+&lt;p&gt;The web client application communicates with the two backend
+micorservices via a Spring Cloud Gateway. The Gateway is configured to
+route based on the target’s path to each proxied backend service.
+And As shown below, a “RewritePath” filter
+is defined to observe the context path to each target service.&lt;/p&gt;
 
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
@@ -184,162 +148,87 @@ is defined to observe the context path of each target service.&lt;/p&gt;
 &lt;h2 id=&quot;security&quot;&gt;Security&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;In this architecture we need to apply OAuth2 security to the client application
+&lt;p&gt;In this architecture we need to apply Spring security to the client application
 and the two backend microservices. New security enhancement in spring 5.x paves
-an easy way to secure applications using OAuth2 standards.&lt;/p&gt;
+the way to seamlessly secure applications using OAuth2 standards.&lt;/p&gt;
 
 &lt;h3 id=&quot;1-web-application---oauth2-client&quot;&gt;1. Web Application - OAuth2 Client&lt;/h3&gt;
 
-&lt;p&gt;You can take advantage
-of auto-configuring an OAuth2/Open ID connect clients if you have
-“spring-security-oauth2-client” dependency on your classpath. It is even gets
+&lt;p&gt;You can take advantage of auto-configuring clients with Spring Security if you have
+“spring-security-oauth2-client” dependency in your classpath. It is even getting
 simpler to register as many clients as you desire using properties with
 “spring.security.oauth2.client” prefix, and define your provider’s properties with
 “spring.security.oauth2.provider” prefix.&lt;/p&gt;
 
-&lt;p&gt;For instance, in this demo, after the web client application is registered with
-one of the OAuth2 / OpenID Connect providers (like Okta), you can configure the
-web application with properties that register a client with the a client-id and
+&lt;p&gt;For instance, in this sample, after the web client application is registered with
+one of the OAuth2 / OpenID Connect providers (like UAA), you can configure the
+web application with properties to register a client using the a client-id and
 client-secret. Also you can define the selected client’s provider with information
 such as the authorization URI, token URI, user-info URI and JWK set URI. With those
 providers who support OpenID Connect discovery, the configuration could be further
 simplified by specifying the issuer URI (with “spring.security.oauth2.client.provider.
 oidc-provider.issuer-uri” prefix).&lt;/p&gt;
 
+&lt;p&gt;The configuration listing above shows an example of properties used to register
+a client and a provider.&lt;/p&gt;
+
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;login-client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;login-client&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;secret&lt;/span&gt;
             &lt;span class=&quot;na&quot;&gt;client-authentication-method&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;basic&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid profile email&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;authorization-grant-type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;authorization_code&lt;/span&gt;            
+            &lt;span class=&quot;na&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;openid,profile,email&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;authorization-grant-type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;authorization_code&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;client-name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Login Client&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;redirect-uri-template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;{baseUrl}/login/oauth2/code/{registrationId}&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;uaa&lt;/span&gt;            
         &lt;span class=&quot;na&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/authorize&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/token&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/userinfo&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;uaa&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;authorization-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/oauth/authorize&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;token-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/oauth/token&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;user-info-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/userinfo&lt;/span&gt;
             &lt;span class=&quot;na&quot;&gt;user-name-attribute&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sub&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://[okta-account].oktapreview.com/oauth2/default/v1/keys&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/token_keys&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The configuration listed above shows many properties for clarity. However, its worth
-to note, the framework provides a set of default configured common OAuth2 and
-OpenID providers, such as Okta, Google, Facebook, and Github. So the configuration
-for Okta above could be simplified as below. Notice, the registered client named
-as ‘okta’ same as the provider name.&lt;/p&gt;
+&lt;h3 id=&quot;2-reservations-service-and-flights-service-as-resource-servers&quot;&gt;2. Reservations Service and Flights Service as Resource Servers&lt;/h3&gt;
 
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# &amp;lt;-- notice the name here&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;You can designate and configure a resource server in Spring Security 5.x by
+having “spring-security-oauth2-resource-server” in your classpath. Spring Boot
+can set up an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI
+is specified.&lt;/p&gt;
 
-&lt;h3 id=&quot;2-flights-service---oauth2-resource-server&quot;&gt;2. Flights Service - OAuth2 Resource Server&lt;/h3&gt;
-
-&lt;p&gt;It gets more simpler with the new OAuth2 support in Spring 5.x to configure
-a resource server. And exactly as noted in Spring security docuemtnation, if you have “spring-security-oauth2-resource-server” on your classpath, Spring Boot can set up
-an OAuth2 Resource Server as long as JWK Set URI or OIDC Issuer URI is specified.&lt;/p&gt;
-
-&lt;p&gt;In this demo application, the flight service acts as a resource server and
-configured with the below properties. With this set up the client application
+&lt;p&gt;For example, the flight service acts as a resource server and is
+configured using the properties below. With this setup the client application
 can communicate securely with the backend flights service.&lt;/p&gt;
 
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;resourceserver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;jwt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;        
-          &lt;span class=&quot;na&quot;&gt;issuer-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://dev-912341.oktapreview.com/oauth2/default&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;jwt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/token_keys&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;3-reservations-service---oauth2-resource-server-and-client&quot;&gt;3. Reservations Service - OAuth2 Resource Server and Client&lt;/h3&gt;
+&lt;h3 id=&quot;4-spring-cloud-gateway&quot;&gt;4. Spring Cloud Gateway&lt;/h3&gt;
 
-&lt;p&gt;For the front-end client web application to access and communicate with the
-reservations service, the reservations service is configured with same properties
-as the flights service. However, this reservation service needs at some point to
-also communicate with the flights service while booking an itinerary. For that,
-the reservations service, besides being a resource server to the web client application,
-would need to act as a client to the flights service. A custom “SecurityWebFilterChain”
-bean is added to the reservations service to account for configuring it as
-a resource server and a client.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SecurityWebFilterChain&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;securityWebFilterChain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServerHttpSecurity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-       &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authorizeExchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyExchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authenticated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;csrf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;disable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;oauth2ResourceServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;jwt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-               &lt;span class=&quot;c1&quot;&gt;// becomes a client again to underneath flights service&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;oauth2Login&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;and&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-               &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Furthermore, the service is also configured with OAuth2 client registration
-properties of the previously registered client in Okta with client_credentials
-grant type. It is a client_credentials grant type in this case as it is only
-needed for a communication between two backend service to service.&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;oauth2&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;registration&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;okta&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;client-secret&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;authorization-grant-type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;client_credentials&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;resourceserver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;jwt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;          
-          &lt;span class=&quot;na&quot;&gt;issuer-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://dev-912341.oktapreview.com/oauth2/default&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;4-spring-cloud-gateway---oauth2-resource-server&quot;&gt;4. Spring Cloud Gateway - OAuth2 Resource Server&lt;/h3&gt;
-
-&lt;p&gt;The Spring Cloud Gateway in this architecture acts also as an edge resource
-service to the frontend web application. It is set with the same OAuth2
-resource server configuration properties as the other two backend services.
-However, as its proxying API requests, it needs to pass through the Authentication
-token it receives from the client application as an “Authorization” Bearer header.
-A Gateway global filter bean is defined to pass through the bearer token to
-underneath proxied services.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GlobalFilter&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;globalFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;entrySet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;AUTHORIZATION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bearerToken&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-					&lt;span class=&quot;n&quot;&gt;ServerHttpRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mutate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-					&lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpHeaders&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;AUTHORIZATION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BEARER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bearerToken&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-					&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exchange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mutate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()))&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;orElseThrow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error creating the global filter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-				&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The Spring Cloud Gateway in this architecture acts as an API gateway
+service to the frontend web application. It routes traffic to targeted backend microservices.
+Spring Cloud Gateway passes through the Authentication
+token it receives from the client application as an “Authorization” Bearer header.&lt;/p&gt;
 
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;The Spring security team at Pivotal made a great and awesome job to help developers
-to easily secure clients and resource servers with OAuth2 and OpenID Connect support.
+&lt;p&gt;The Spring security team at Pivotal made significant improvements
+to secure client and resource server applications with Spring Security 5.x.
 One can easily secure applications using OAuth2 standards with so minimum fuss.
-You can have it all configured with just having the appropriate dependency and
-right OAuth2 configuration properties for the registered client, resource server
+You can get it all configured by specifying the appropriate security dependencies
+and configuration properties to configure a client, resource server
 or optionally a provider.&lt;/p&gt;
 
 &lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
@@ -348,7 +237,7 @@ or optionally a provider.&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;Sample Demo application Code in &lt;a href=&quot;https://github.com/Haybu/RA-OAuth2-Gen2&quot;&gt;Github&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Spring Security &lt;a href=&quot;https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-security.html&quot;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">Spring framework provides a comprehensive and extensible authentication and authorization support. Latest enhancements in Spring 5.x have made it simple to apply security standards such as OAuth2 to secure applications. In this blog I will demonstrate how to use OAuth2 second-generation support in Spring framework to secure a distributed and reactive-based microservices application.</summary></entry><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
+&lt;/ul&gt;</content><author><name>Haytham Mohamed</name></author><summary type="html">Spring framework provides a comprehensive and extensible authentication and authorization support. Latest enhancements in Spring 5.x have made it simple to apply security standards such as OAuth2 to secure applications. In this blog I will demonstrate leveraging second-generation of OAuth2 support in Springframework security in a distributed and reactive-based microservices application.</summary></entry><entry><title type="html">Spring Security OAuth2 First Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen1/" rel="alternate" type="text/html" title="Spring Security OAuth2 First Generation" /><published>2018-08-20T00:00:00-05:00</published><updated>2018-08-20T00:00:00-05:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen1</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen1/">&lt;p&gt;This article describes how to secure an application using Spring security OAuth2
 generation-one. The sample consists of an Angular front-end application
 and a couple of Spring boot based backend services. Both front-end application
 and backend services are behind an edge proxy that assumes the responsibility
