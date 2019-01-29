@@ -222,7 +222,7 @@ is defined to observe the context path to each target service.</p>
 and the two backend microservices. New security enhancement in spring 5.x paves
 the way to seamlessly secure applications using OAuth2 standards.</p>
 
-<h3 id="1-web-application---oauth2-client">1. Web Application - OAuth2 Client</h3>
+<h3 id="web-application---oauth2-client">Web Application - OAuth2 Client</h3>
 
 <p>You can take advantage of auto-configuring clients with Spring Security if you have
 “spring-security-oauth2-client” dependency in your classpath. It is even getting
@@ -265,7 +265,7 @@ a client and a provider.</p>
             <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">http://localhost:8099/uaa/token_keys</span>
 </code></pre></div></div>
 
-<h3 id="2-reservations-service-and-flights-service-as-resource-servers">2. Reservations Service and Flights Service as Resource Servers</h3>
+<h3 id="reservations-service-and-flights-service-as-resource-servers">Reservations Service and Flights Service as Resource Servers</h3>
 
 <p>You can designate and configure a resource server in Spring Security 5.x by
 having “spring-security-oauth2-resource-server” in your classpath. Spring Boot
@@ -284,7 +284,7 @@ can communicate securely with the backend flights service.</p>
           <span class="na">jwk-set-uri</span><span class="pi">:</span> <span class="s">http://localhost:8099/uaa/token_keys</span>
 </code></pre></div></div>
 
-<h3 id="4-spring-cloud-gateway">4. Spring Cloud Gateway</h3>
+<h3 id="spring-cloud-gateway-1">Spring Cloud Gateway</h3>
 
 <p>The Spring Cloud Gateway in this architecture acts as an API gateway
 service to the frontend web application. It routes traffic to targeted backend microservices.

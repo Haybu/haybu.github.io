@@ -151,7 +151,7 @@ In this architecture we need to apply Spring security to the client application
 and the two backend microservices. New security enhancement in spring 5.x paves
 the way to seamlessly secure applications using OAuth2 standards.
 
-### 1. Web Application - OAuth2 Client
+### Web Application - OAuth2 Client
 
 You can take advantage of auto-configuring clients with Spring Security if you have
 "spring-security-oauth2-client" dependency in your classpath. It is even getting
@@ -195,7 +195,7 @@ spring:
             jwk-set-uri: http://localhost:8099/uaa/token_keys
 ~~~
 
-### 2. Reservations Service and Flights Service as Resource Servers
+### Reservations Service and Flights Service as Resource Servers
 
 You can designate and configure a resource server in Spring Security 5.x by
 having "spring-security-oauth2-resource-server" in your classpath. Spring Boot
@@ -215,7 +215,7 @@ spring:
           jwk-set-uri: http://localhost:8099/uaa/token_keys
 ~~~
 
-### 4. Spring Cloud Gateway
+### Spring Cloud Gateway
 
 The Spring Cloud Gateway in this architecture acts as an API gateway
 service to the frontend web application. It routes traffic to targeted backend microservices.

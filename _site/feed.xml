@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-29T16:18:54-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible authentication
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-29T16:38:47-06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Haytham Mohamed</title><subtitle>Advisory Solutions Architect @Pivotal</subtitle><entry><title type="html">Spring Security OAuth2 Second Generation</title><link href="http://localhost:4000/Spring-Security-OAuth2-Gen2/" rel="alternate" type="text/html" title="Spring Security OAuth2 Second Generation" /><published>2018-11-11T00:00:00-06:00</published><updated>2018-11-11T00:00:00-06:00</updated><id>http://localhost:4000/Spring-Security-OAuth2-Gen2</id><content type="html" xml:base="http://localhost:4000/Spring-Security-OAuth2-Gen2/">&lt;p&gt;Spring framework provides a comprehensive and extensible authentication
 and authorization support. Latest enhancements in Spring 5.x have made it simple
 to apply security standards such as OAuth2 to secure applications. In this blog I will
 demonstrate leveraging second-generation of OAuth2 support in Springframework
@@ -152,7 +152,7 @@ is defined to observe the context path to each target service.&lt;/p&gt;
 and the two backend microservices. New security enhancement in spring 5.x paves
 the way to seamlessly secure applications using OAuth2 standards.&lt;/p&gt;
 
-&lt;h3 id=&quot;1-web-application---oauth2-client&quot;&gt;1. Web Application - OAuth2 Client&lt;/h3&gt;
+&lt;h3 id=&quot;web-application---oauth2-client&quot;&gt;Web Application - OAuth2 Client&lt;/h3&gt;
 
 &lt;p&gt;You can take advantage of auto-configuring clients with Spring Security if you have
 “spring-security-oauth2-client” dependency in your classpath. It is even getting
@@ -195,7 +195,7 @@ a client and a provider.&lt;/p&gt;
             &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/token_keys&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;2-reservations-service-and-flights-service-as-resource-servers&quot;&gt;2. Reservations Service and Flights Service as Resource Servers&lt;/h3&gt;
+&lt;h3 id=&quot;reservations-service-and-flights-service-as-resource-servers&quot;&gt;Reservations Service and Flights Service as Resource Servers&lt;/h3&gt;
 
 &lt;p&gt;You can designate and configure a resource server in Spring Security 5.x by
 having “spring-security-oauth2-resource-server” in your classpath. Spring Boot
@@ -214,7 +214,7 @@ can communicate securely with the backend flights service.&lt;/p&gt;
           &lt;span class=&quot;na&quot;&gt;jwk-set-uri&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8099/uaa/token_keys&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;4-spring-cloud-gateway&quot;&gt;4. Spring Cloud Gateway&lt;/h3&gt;
+&lt;h3 id=&quot;spring-cloud-gateway-1&quot;&gt;Spring Cloud Gateway&lt;/h3&gt;
 
 &lt;p&gt;The Spring Cloud Gateway in this architecture acts as an API gateway
 service to the frontend web application. It routes traffic to targeted backend microservices.
